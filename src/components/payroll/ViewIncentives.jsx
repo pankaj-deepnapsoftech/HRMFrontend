@@ -19,14 +19,20 @@ const ViewIncentives = ({ empData, type }) => {
     const isIncentive = type === "Incentives";
 
     if (data.length === 0) {
-      return <p className="text-center text-gray-500 mt-4">No {type.toLowerCase()} found for this employee.</p>;
+      return (
+        <p className="text-center text-gray-500 mt-4">
+          No {type.toLowerCase()} found for this employee.
+        </p>
+      );
     }
 
     return (
       <table className="min-w-full table-auto text-left text-sm text-gray-700">
         <thead>
           <tr className="bg-gray-200">
-            <th className="px-6 py-3 font-semibold">{isIncentive ? "Amount" : "Reimbursement Amount"}</th>
+            <th className="px-6 py-3 font-semibold">
+              {isIncentive ? "Amount" : "Reimbursement Amount"}
+            </th>
             <th className="px-6 py-3 font-semibold">Date</th>
             <th className="px-6 py-3 font-semibold">Notes</th>
           </tr>
@@ -34,11 +40,11 @@ const ViewIncentives = ({ empData, type }) => {
         <tbody>
           {data.map((item) => (
             <tr key={item?._id} className="border-b hover:bg-gray-50">
-              <td className="px-6 py-4 text-green-500">
-                ₹{item?.amount}
-              </td>
+              <td className="px-6 py-4 text-green-500">₹{item?.amount}</td>
               <td className="px-6 py-4">
-                {new Date(item?.date).toLocaleDateString()}
+                {isIncentive
+                  ? new Date(item?.date).toLocaleDateString()
+                  : new Date(item?.paymentDate).toLocaleDateString()}
               </td>
               <td className="px-6 py-4">{item?.notes}</td>
             </tr>
@@ -55,9 +61,7 @@ const ViewIncentives = ({ empData, type }) => {
       </h1>
 
       {/* Render the appropriate table based on the type */}
-      <div className="mt-6">
-        {renderTable()}
-      </div>
+      <div className="mt-6">{renderTable()}</div>
     </div>
   );
 };

@@ -47,6 +47,7 @@ import EmpShowCauseNotice from "./components/EmpShowCauseNotice";
 import ReviewShowCauseNotice from "./components/ReviewShowCauseNotice";
 import Incentives from "./components/payroll/Incentives";
 import Reimbursements from "./components/payroll/Reimbursements";
+import PayrollSummary from "./components/payroll/PayrollSummary";
 
 const App = () => {
   const [authToken, setAuthToken] = useState(null);
@@ -203,6 +204,15 @@ const App = () => {
           element={
             <ProtectedRoute
               element={<EmpLocation />}
+              isAuthenticated={isAuthenticated}
+            ></ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/employee/payrollSummary"
+          element={
+            <ProtectedRoute
+              element={<PayrollSummary />}
               isAuthenticated={isAuthenticated}
             ></ProtectedRoute>
           }

@@ -375,7 +375,7 @@ export default function Dashboard() {
         {
           text: <span className="text-[1rem] font-semibold">Payroll Summary</span>,
           icon: <MdOutlineStickyNote2 className="text-2xl mr-2" />,
-          path: "/generate/employee/payslip",
+          path: "/employee/payrollSummary",
         },
         {
           text: <span className="text-[1rem] font-semibold">Advanced Money</span>,

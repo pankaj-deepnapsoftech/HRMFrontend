@@ -119,7 +119,7 @@ const Incentives = () => {
       </div>
 
       {/* Modal to View Employee Details */}
-      <Dialog open={viewOpen} onClose={handleAddClose}>
+      <Dialog open={viewOpen} onClose={handleViewClose}>
         <DialogTitle className="text-center text-xl font-semibold">
           View Employee Incentives
         </DialogTitle>

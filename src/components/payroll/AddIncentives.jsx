@@ -22,10 +22,10 @@ const AddIncentives = ({ empId, onClose, type }) => {
       await axios.post(apiUrl, {
         employeeId: empId,
         amount,
-        date,
+        [type === "incentive" ? "date" : "paymentDate"]:  date, 
         notes,
       });
-
+      
       setRefresh();
       toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} added.`, {
         position: "top-right",

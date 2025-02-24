@@ -102,7 +102,7 @@ const PayrollSummary = () => {
         </div>
       </div>
 
-      {/* Earning Details Dialog */}
+
       <Dialog open={viewOpen} onClose={handleViewClose} fullWidth maxWidth="sm">
         <DialogTitle className="text-center text-xl font-semibold">
           Earning Details

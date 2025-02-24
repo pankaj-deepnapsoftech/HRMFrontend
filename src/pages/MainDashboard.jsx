@@ -426,8 +426,6 @@ export default function Dashboard() {
               <MenuIcon />
             </IconButton>
 
-            {/* <!-- Dropdown menu --> */}
-
             <div className="flex w-full justify-end gap-4">
               <h3 className="flex justify-center items-center gap-2 text-indigo-500 font-semibold indigo-500/50 ">
                 <Link
@@ -435,11 +433,11 @@ export default function Dashboard() {
                   to="/employee/request/leave/approval"
                 >
                   {" "}
-                  {/*--------Pending request------------*/}
+                 
                   <MdOutlinePendingActions className="text-2xl " />
                 </Link>
               </h3>
-              {/* Avatar Button */}
+
               <img
                 id="avatarButton"
                 onClick={toggleDropdown}
@@ -451,7 +449,6 @@ export default function Dashboard() {
                 alt="User dropdown"
               />
 
-              {/* Dropdown */}
               <div
                 id="userDropdown"
                 className={`absolute right-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 transition-opacity duration-200 ${
@@ -518,9 +515,9 @@ export default function Dashboard() {
           open={open}
           variant="permanent"
           sx={{
-            width: { xs: 60, sm: 100, md: 240 }, // Adjust drawer width for different screen sizes
+            width: { xs: 60, sm: 100, md: 240 }, 
             flexShrink: 0,
-            transition: "width 0.3s ease", // Smooth transition for resizing
+            transition: "width 0.3s ease",
           }}
         >
           <DrawerHeader className="bg-[#FFFFFF] object-fit flex justify-center  items-center">
@@ -531,7 +528,7 @@ export default function Dashboard() {
             <h5 className="pr-[2rem] font-semibold">
               <Link to="/home">Deepnap Softech</Link>
             </h5>
-            {/* Toggle Button to open/close list items */}
+
             <div className="lg:hidden flex flex-col items-center justify-center">
               <IconButton
                 onClick={toggleDrawer}
@@ -557,12 +554,12 @@ export default function Dashboard() {
                         minHeight: 55,
                         px: 1.5,
                         transition: "all 0.3s ease-in-out",
-                        color: "#333333", // Default text and icon color
+                        color: "#333333", 
                         "&:hover": {
                           backgroundColor: "#0080FC",
                           cursor: "pointer",
-                          color: "white", // Hover text and icon color
-                          borderRadius: "8px", // Rounded corners
+                          color: "white", 
+                          borderRadius: "8px",
                         },
                         "&:hover .MuiListItemIcon-root, &:hover .MuiListItemText-primary":
                           {

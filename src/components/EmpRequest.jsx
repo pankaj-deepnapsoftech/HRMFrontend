@@ -61,7 +61,7 @@ const EmpRequest = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-s
+
     await fetchLeaveLimits();
 
     console.log("Leave limits after fetch:", leaveLimits);

@@ -31,6 +31,21 @@ const LeaveRequest = () => {
   // get the latest leave request
   const getLatestLeave = (requestLeave) => {
     if (!requestLeave || requestLeave.length === 0) return null;
+
+    // Prioritize pending leaves first
+    const pendingLeaves = requestLeave.filter(
+      (leave) => leave.status === "Pending"
+    );
+
+    if (pendingLeaves.length > 0) {
+      return pendingLeaves.reduce((latest, current) =>
+        new Date(current.fromDate) > new Date(latest.fromDate)
+          ? current
+          : latest
+      );
+    }
+
+    // If no pending leave, return the latest leave regardless of status
     return requestLeave.reduce((latest, current) =>
       new Date(current.fromDate) > new Date(latest.fromDate) ? current : latest
     );
@@ -94,35 +109,35 @@ const LeaveRequest = () => {
             <tbody>
               {allUsers.length > 0 ? (
                 allUsers.map((user) => {
-                  const latestLeave = getLatestLeave(user.requestLeave);
+                  const latestLeave = getLatestLeave(user?.requestLeave);
 
                   return (
                     <tr
-                      key={user._id}
+                      key={user?._id}
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                     >
                       <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                        {user.firstName} {user.lastName}
+                        {user?.firstName} {user?.lastName}
                       </td>
-                      <td className="px-6 py-4">{user.email}</td>
-                      <td className="px-6 py-4">{user.department}</td>
-                      <td className="px-6 py-4">{user.role}</td>
-                      <td className="px-6 py-4">{user.employeeCode}</td>
+                      <td className="px-6 py-4">{user?.email}</td>
+                      <td className="px-6 py-4">{user?.department}</td>
+                      <td className="px-6 py-4">{user?.role}</td>
+                      <td className="px-6 py-4">{user?.employeeCode}</td>
                       <td className="px-6 py-4">
                         {latestLeave
-                          ? latestLeave.fullLeave
+                          ? latestLeave?.fullLeave
                             ? "Full Day"
                             : "Half Day"
                           : "N/A"}
                       </td>
                       <td className="px-6 py-4">
                         {latestLeave
-                          ? new Date(latestLeave.fromDate).toLocaleDateString()
+                          ? new Date(latestLeave?.fromDate).toLocaleDateString()
                           : "N/A"}
                       </td>
                       <td className="px-6 py-4">
                         {latestLeave?.toDate
-                          ? new Date(latestLeave.toDate).toLocaleDateString()
+                          ? new Date(latestLeave?.toDate).toLocaleDateString()
                           : "N/A"}
                       </td>
                       <td className="px-6 py-4">
@@ -144,7 +159,7 @@ const LeaveRequest = () => {
                           }
                           className="text-green-500 hover:underline"
                           disabled={
-                            !latestLeave || latestLeave.status === "Approved"
+                            !latestLeave || latestLeave?.status === "Approved"
                           }
                         >
                           Approve
@@ -161,7 +176,7 @@ const LeaveRequest = () => {
                           }
                           className="text-red-500 hover:underline"
                           disabled={
-                            !latestLeave || latestLeave.status === "Rejected"
+                            !latestLeave || latestLeave?.status === "Rejected"
                           }
                         >
                           Reject
@@ -177,7 +192,7 @@ const LeaveRequest = () => {
                           }
                           className="text-yellow-500 hover:underline"
                           disabled={
-                            !latestLeave || latestLeave.status === "Pending"
+                            !latestLeave || latestLeave?.status === "Pending"
                           }
                         >
                           Pending

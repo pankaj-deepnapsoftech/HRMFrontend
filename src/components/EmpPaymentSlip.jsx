@@ -97,14 +97,37 @@ const EmpPaymentSlip = () => {
     const breakdownStartY = startY + details.length * 8 + 12;
     doc.setFont("helvetica", "bold");
     doc.text("Salary Breakdown", 14, breakdownStartY);
+    
+    const incentive = employee?.incentive?.reduce(
+      (sum, inc) => sum + inc.amount,
+      0
+    );
+    const reimbursement = employee?.reimbursement?.reduce(
+      (sum, inc) => sum + inc.amount,
+      0
+    );
+    const advanceTotal = employee?.advanceRequests?.reduce(
+      (sum, rem) => sum + rem.amount,
+      0
+    );
 
     const salaryBreakdown = [
-      ["Basic Salary", `${employee.salary}`],
-      ["Fund (12%)", `${employee.fund}`],
+      ["Basic Salary", `${employee.salary.toFixed(2)}`],
+      ["Fund (12%)", `${employee.fund.toFixed(2)}`],
+      ["Incentives", `${incentive.toFixed(2)}`],
+      ["Reimbursements", `${reimbursement.toFixed(2)}`],
+      ["Advance", `${advanceTotal.toFixed(2)}`],
       ["Deductions", "0.00"],
-      ["Net Salary", `${employee.salary - employee.fund}`],
+      [
+        "Net Salary",
+        `${(
+          (employee?.salary +
+          incentive +
+          reimbursement) -
+          (employee.fund + advanceTotal)
+        ).toFixed(2)}`,
+      ],
     ];
-
     // Using AutoTable for consistent formatting
     doc.autoTable({
       startY: breakdownStartY + 8,

@@ -15,7 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import EmpActivityTracker from "../components/EmpActivityTracker";
+ 
 
 function EmpDashboard() {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -317,8 +317,7 @@ function EmpDashboard() {
           </Container>
         </AppBar>
       </Box>
-      {/* <p>Active Time: {activeTime}</p> */}
-      <EmpActivityTracker />
+      
     </div>
   );
 }

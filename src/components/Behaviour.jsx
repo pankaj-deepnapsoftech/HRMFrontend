@@ -31,7 +31,7 @@ const Behaviour = () => {
           },
         }
       );
-      console.log(response.data);
+
       setRuleData(response.data);
       // toast
       toast.success("New Rule Created Successfully", {

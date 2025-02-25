@@ -46,7 +46,6 @@ const EmpLeavesChanges = () => {
       });
     } catch (error) {
       // Handle error and set an error message if any
-      console.error(error);
       toast.error("Employee leaves balance does not updated", {
         position: "top-right",
         autoClose: 1000,

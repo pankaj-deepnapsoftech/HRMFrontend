@@ -19,8 +19,7 @@ const LeaveRequest = () => {
       );
       setAllUsers(response.data.data.user);
     } catch (error) {
-      console.error("Error fetching registered users:", error);
-      alert("Failed to fetch user data.");
+      toast.error("Failed to fetch user data.");
     }
   };
 
@@ -73,7 +72,6 @@ const LeaveRequest = () => {
         autoClose: 1000,
       });
     } catch (error) {
-      console.error(`Error updating leave status to ${status}:`, error);
       toast.error(`Failed to update leave status to ${status}.`, {
         position: "top-right",
         autoClose: 1000,

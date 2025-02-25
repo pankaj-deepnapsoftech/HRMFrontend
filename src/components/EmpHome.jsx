@@ -31,7 +31,7 @@ const EmpHome = () => {
 
   // // Use EmployeeContext to get the employee data
   const { employees } = useContext(EmployeeContext);
-  console.log(employees || []);
+
 
   // // Get employee data from localStorage
 
@@ -42,9 +42,9 @@ const EmpHome = () => {
       try {
         const parsedUser = JSON.parse(storedUser);
         setEmployeeId(parsedUser.data.userResponse._id);
-        console.log(parsedUser);
+
       } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
+        toast.error(`Error parsing user data from local storage: ${error}`);
       }
     }
   }, []);
@@ -57,7 +57,6 @@ const EmpHome = () => {
           import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
         }/api/v1/user/${employeeId}/logout`
       );
-      console.log(response.data);
       localStorage.removeItem("employeeLogin");
       localStorage.removeItem("reqLeave");
       toast.success("Employee logout successfully!", {
@@ -72,7 +71,7 @@ const EmpHome = () => {
       });
       // Perform any additional actions like redirecting or removing from localStorage
     } catch (error) {
-      console.error("Logout failed:", error);
+      toast.error(`Logout failed: ${error}`);
     }
   };
 

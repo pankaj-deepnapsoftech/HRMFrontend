@@ -21,7 +21,7 @@ const PayrollSummary = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewOpen, setViewOpen] = useState(false);
 
-  console.log(employees);
+
 
   const handleViewOpen = (employee) => {
     setSelectedEmployee(employee);

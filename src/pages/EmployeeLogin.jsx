@@ -24,7 +24,6 @@ const EmployeeLogin = () => {
           });
         },
         (error) => {
-          console.error("Error fetching location:", error);
           toast.warn(
             "Unable to fetch location. Please enable location services.",
             {
@@ -69,23 +68,14 @@ const EmployeeLogin = () => {
         }
       );
 
-      // Log response for debugging
-      console.log("Login response:", response);
          
       // Handle time data
       const date = new Date(response.data.data.createdAt);
-      console.log(
-        `Date: ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-      );
-      console.log(
-        `Time: ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-      );
+     
 
       // Store user data in local storage
       localStorage.setItem("employeeLogin", JSON.stringify(response.data));
-      console.log("Employee data stored in localStorage:", response.data);
-
-    
+     
       // Show success toast and navigate to home page after it completes
       toast.success("Employee Login successfully!", {
         position: "top-right",

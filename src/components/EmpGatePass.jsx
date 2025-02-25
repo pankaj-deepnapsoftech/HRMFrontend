@@ -33,7 +33,7 @@ const EmpGatePass = () => {
         );
         setPreviousRequests(response.data.gatePassRequests);
       } catch (error) {
-        console.error("Error fetching previous gate pass requests:", error);
+        toast.error(`Error fetching previous gate pass requests:  ${error}`);
       }
     };
 
@@ -84,7 +84,7 @@ const EmpGatePass = () => {
       setTotalKm("");
       setCompanyWorkReason("");
     } catch (error) {
-      console.error("Error submitting gate pass:", error);
+
       toast.error(
         error.response.data.message || "Failed to submit gate pass request.",
         {

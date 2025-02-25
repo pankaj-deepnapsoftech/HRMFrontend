@@ -38,7 +38,7 @@ const EmpShowCauseNotice = () => {
         );
         setShowCauseNotices(response.data.showCauseNotices);
       } catch (error) {
-        console.error("Error fetching show cause notices:", error);
+        toast.error(`Error fetching show cause notices: ${error}`);
       }
     };
     getShowCauseNotice();
@@ -81,7 +81,6 @@ const EmpShowCauseNotice = () => {
         setShowCauseNotices((prev) => [response.data.newNotice, ...prev]);
       }
     } catch (error) {
-      console.error("Error submitting Show Cause Notice:", error);
       toast.error(
         error.response?.data?.message || "Failed to submit Show Cause Notice",
         {

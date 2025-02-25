@@ -26,7 +26,7 @@ const EmpNotes = () => {
           );
           setNotes(response.data);
         } catch (err) {
-          console.error("Error fetching notes:", err);
+          toast.error(`Error fetching notes: ${err}`);
         }
       };
 
@@ -46,7 +46,7 @@ const EmpNotes = () => {
       setNotes(response.data);
       setNewNote("");
     } catch (err) {
-      console.error("Error adding note:", err);
+      toast.error(`Error adding note: ${err}`);
     }
   };
 
@@ -59,7 +59,7 @@ const EmpNotes = () => {
       );
       setNotes(response.data);
     } catch (err) {
-      console.error("Error deleting note:", err);
+      toast.error(`Error deleting note: ${err}`);
     }
   };
 

@@ -38,7 +38,6 @@ const EmpAssetsSubmit = () => {
         }
       }
     } catch (error) {
-      console.error("Error fetching assets:", error);
       toast.error("Failed to fetch assets. Please try again later.", {
         position: "top-right",
         autoClose: 1000,
@@ -79,7 +78,6 @@ const EmpAssetsSubmit = () => {
         });
       }
     } catch (error) {
-      console.error("Error returning assets:", error);
       toast.error("Failed to process the return request.", {
         position: "top-right",
         autoClose: 1000,

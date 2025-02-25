@@ -19,7 +19,7 @@ const EmpDocuments = () => {
           parsedUser.data.userResponse.backgroundVerification
         );
       } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
+        toast.error(`Error parsing user data from local storage: ${error}`);
       }
     }
   }, []);

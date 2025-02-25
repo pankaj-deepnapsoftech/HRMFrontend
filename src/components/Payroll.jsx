@@ -29,7 +29,6 @@ const Payroll = () => {
         }
         setAdvanceRequests(requests);
       } catch (error) {
-        console.error("Error fetching advance requests:", error);
         toast.error("Failed to load advance requests.");
       }
     };
@@ -42,9 +41,9 @@ const Payroll = () => {
           }/api/v1/user/get/advanced/eligiblity`
         );
         setAdvanceEligibilityYears(response.data.advanceEligibilityYears || 0);
-        console.log(response.data.advanceEligibilityYears || 0);
+      
       } catch (error) {
-        console.error("Error fetching advance eligibility years:", error);
+     
         toast.error("Failed to load eligibility settings.");
       }
     };
@@ -69,7 +68,7 @@ const Payroll = () => {
         autoClose: 1000,
       });
     } catch (error) {
-      console.error("Error updating eligibility years:", error);
+
       toast.error("Failed to update eligibility settings.");
     }
   };
@@ -94,7 +93,7 @@ const Payroll = () => {
         ),
       }));
     } catch (error) {
-      console.error("Error approving advance request:", error);
+
       toast.error(
         error.response.data.message || "Failed to approve advance request.",
         {
@@ -122,7 +121,7 @@ const Payroll = () => {
         ),
       }));
     } catch (error) {
-      console.error("Error rejecting advance request:", error);
+
       toast.error("Failed to reject advance request.");
     }
   };
@@ -136,7 +135,7 @@ const Payroll = () => {
     if (!editingRequest) return;
 
     const { employeeId, requestId } = editingRequest;
-    console.log(employeeId, requestId);
+
     try {
       const response = await axios.put(
         `${
@@ -149,7 +148,7 @@ const Payroll = () => {
           status: "approved",
         }
       );
-      console.log(response.data);
+
 
       toast.success("Advance request updated successfully!", {
         position: "top-right",
@@ -171,7 +170,7 @@ const Payroll = () => {
       setEditingRequest(null);
       setEditedAmount("");
     } catch (error) {
-      console.error("Error updating advance request:", error);
+      
       toast.error(
         error.response.data.message || "Failed to update advance request.",
         {

@@ -67,9 +67,9 @@ const Projects = () => {
       );
       setManagers(filteredManagers); // Set filtered managers
       setMembers(activeUsers);
-      console.log(filteredManagers);
+
     } catch (error) {
-      console.log("Error fetching registered users:", error);
+      toast.error(`Error fetching registered users: ${error}`);
     }
   };
 
@@ -94,7 +94,7 @@ const Projects = () => {
         }
       );
       setProject(response.data.data.project);
-      console.log(response.data.data.project);
+
       // Store user data in local storage
       localStorage.setItem("projectDetails", JSON.stringify(response.data));
 

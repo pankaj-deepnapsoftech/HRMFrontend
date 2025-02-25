@@ -9,7 +9,7 @@ const Termination = () => {
   const { employees, setEmployees, setRefresh } = useContext(EmployeeContext);
 
   const terminateEmployee = async (employeeId) => {
-    console.log(employeeId);
+
     try {
       const response = await axios.patch(
         `${
@@ -31,7 +31,6 @@ const Termination = () => {
         autoClose: 1000,
       });
     } catch (error) {
-      console.error("Error terminating employee:", error);
       toast.error("Failed to terminate the employee.", {
         position: "top-right",
         autoClose: 1000,

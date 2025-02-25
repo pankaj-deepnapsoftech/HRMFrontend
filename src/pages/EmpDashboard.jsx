@@ -41,13 +41,11 @@ function EmpDashboard() {
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
-        console.log(parsedUser.data.userResponse.firstName);
         setUsername(parsedUser.data.userResponse.firstName);
         setEmail(parsedUser.data.userResponse.email);
         setEmployeeId(parsedUser.data.userResponse._id);
-        console.log(parsedUser);
       } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
+       toast.error(`An error occured!  - ${error}`)
       }
     }
   }, []);
@@ -60,7 +58,6 @@ function EmpDashboard() {
           import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
         }/api/v1/user/${employeeId}/logout`
       );
-      console.log(response.data);
       localStorage.removeItem("employeeLogin");
       localStorage.removeItem("reqLeave");
       localStorage.removeItem("employeeNotes");
@@ -77,7 +74,7 @@ function EmpDashboard() {
       });
       // Perform any additional actions like redirecting or removing from localStorage
     } catch (error) {
-      console.error("Logout failed:", error);
+      toast.error(`Logout failed: ${error}`);
     }
   };
 
@@ -88,9 +85,8 @@ function EmpDashboard() {
       try {
         const parsedUser = JSON.parse(storedUser);
         setEmpId(parsedUser.data.userResponse._id); // Set empId from parsed data
-        console.log(parsedUser);
       } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
+        toast.error(`"Error parsing user data from local storage: ${error}`);
       }
     }
   }, []);
@@ -107,9 +103,9 @@ function EmpDashboard() {
             }/api/v1/user/employee/${empId}/active/time`
           );
           setActiveTime(response.data.activeTime); // Set active time to state
-          console.log(response.data);
+        
         } catch (error) {
-          console.error("Error fetching active time:", error);
+          toast.error(`Error fetching active time: ${error}`);
         }
       };
 

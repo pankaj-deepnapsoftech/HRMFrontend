@@ -40,7 +40,6 @@ const EmpResetPassword = () => {
 
       setLoading(false);
     } catch (error) {
-      console.log("Error in handleResetPassword:", error);
       setMessage("An error occurred. Please try again.");
       setLoading(false);
     }

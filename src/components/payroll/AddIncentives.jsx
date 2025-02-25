@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { EmployeeContext } from "../../context/EmployeeContext";
 
 const AddIncentives = ({ empId, onClose, type }) => {
+  console.log(type)
   const [amount, setAmount] = useState();
   const { setRefresh } = useContext(EmployeeContext);
   const [date, setDate] = useState();
@@ -14,7 +15,7 @@ const AddIncentives = ({ empId, onClose, type }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const apiUrl = type === "incentive" 
+    const apiUrl = type === "Incentives" 
       ? `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/incentive`
       : `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/addReimbursement`;
 
@@ -38,8 +39,8 @@ const AddIncentives = ({ empId, onClose, type }) => {
       });
     }
 
-    setAmount(null);
-    setDate(null);
+    setAmount(0);
+    setDate("");
     setNotes("");
     onClose();
   };

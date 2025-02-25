@@ -161,7 +161,7 @@ export default function Dashboard() {
         ); // Log the response here
         setPresentCount(response.data.presentCount);
       } catch (err) {
-        console.error("Error fetching present employees:", err);
+        toast.error(`An error occured: ${err}`)
       }
     };
     getPresentEmployee();
@@ -179,7 +179,7 @@ export default function Dashboard() {
 
         setAbsentCount(response.data.absentCount);
       } catch (err) {
-        console.error("Error fetching present employees:", err);
+        toast.error(`Error fetching present employees: ${err}`);
       }
     };
     getAbsentEmployee();
@@ -218,7 +218,7 @@ export default function Dashboard() {
           email: parsedUser.data.userResponse.email || "unknown@example.com",
         });
       } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
+        toast.error(`Error parsing user data from local storage: ${error}`);
       }
     }
   }, []);

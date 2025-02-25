@@ -27,7 +27,6 @@ const EmpAdvanced = ({ employee }) => {
         joiningDate.getFullYear() + advanceEligibilityYears
       ); // Add 2 years
       setEligibilityDate(joiningDate); // Set the eligibility date
-      console.log(joiningDate);
     }
   }, []);
 
@@ -41,7 +40,7 @@ const EmpAdvanced = ({ employee }) => {
         );
         setAdvanceRequests(response.data.advanceRequests);
       } catch (error) {
-        console.error("Error fetching advance requests:", error);
+        toast.error(`Error fetching advance requests: ${error}`);
       }
     }
   };
@@ -72,7 +71,6 @@ const EmpAdvanced = ({ employee }) => {
         autoClose: 1000,
       });
     } catch (error) {
-      console.error(error);
       toast.error(
         error.response.data.message || "Advanced request does not send.",
         {

@@ -14,8 +14,7 @@ const ReviewShowCauseNotice = () => {
         }/api/v1/user/get/showcause/notice`
       )
       .then((response) => {
-        console.log("Fetched Notices:", response.data.showCauseNotices);
-        console.log("Fetched Notices:", response.data.showCauseNotices);
+
         setNotices(
           Array.isArray(response.data.showCauseNotices)
             ? response.data.showCauseNotices
@@ -23,7 +22,7 @@ const ReviewShowCauseNotice = () => {
         );
       })
       .catch((error) =>
-        console.error("Error fetching show cause notices:", error)
+        toast.error( `Error fetching show cause notices: ${error}`)
       );
   }, []);
 
@@ -34,7 +33,7 @@ const ReviewShowCauseNotice = () => {
         noticeId: id,
       };
 
-      console.log("Sending data:", requestBody);
+
 
       const response = await axios.put(
         `${
@@ -51,7 +50,7 @@ const ReviewShowCauseNotice = () => {
         );
       }
     } catch (error) {
-      console.error("Error updating status:", error);
+      toast.error(`Error updating status: ${error}`);
     }
   };
 

@@ -51,7 +51,7 @@ const FrontPage = () => {
         ],
       });
     } catch (error) {
-      console.error("Error fetching registered users:", error);
+      toast.error(`Error fetching registered users: ${error}`);
     }
   };
 

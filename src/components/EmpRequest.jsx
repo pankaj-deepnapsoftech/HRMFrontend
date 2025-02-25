@@ -31,24 +31,20 @@ const EmpRequest = () => {
   // Fetch the leave limits whenever the employee ID is available
   const fetchLeaveLimits = async () => {
     if (!employeeId) {
-      console.warn("Employee ID is not set yet.");
       return;
     }
 
     const url = `${
       import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
     }/api/v1/user/${employeeId}/leave/limits`;
-    console.log("Fetching leave limits from URL:", url);
+  
 
     try {
       const response = await axios.get(url);
-      console.log("Fetched leave limits:", response.data?.leaveLimits);
+
       setLeaveLimits(response.data?.leaveLimits);
     } catch (error) {
-      console.error(
-        "Error fetching leave limits:",
-        error.response?.data || error.message
-      );
+
       toast.error("Failed to fetch leave limits", { autoClose: 3000 });
     }
   };
@@ -64,7 +60,7 @@ const EmpRequest = () => {
 
     await fetchLeaveLimits();
 
-    console.log("Leave limits after fetch:", leaveLimits);
+
 
 
     if (halfLeave && leaveLimits.halfDayLeaves <= 0) {
@@ -115,7 +111,7 @@ const EmpRequest = () => {
    
       await fetchLeaveLimits();
     } catch (error) {
-      console.error("Error:", error.response?.data || error.message);
+
       toast.error(
         error.response?.data?.message || "Request submission failed",
         { autoClose: 1000 }
@@ -123,9 +119,6 @@ const EmpRequest = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("Updated leave limits:", leaveLimits);
-  }, [leaveLimits]);
 
   return (
     <>

@@ -105,7 +105,6 @@ const EmployeeDetails = () => {
       );
 
       setEmployee(response.data);
-      console.log(response.data);
       localStorage.setItem(
         "EmployeeId",
         JSON.stringify(response.data.data._id)
@@ -131,9 +130,9 @@ const EmployeeDetails = () => {
       try {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser.data);
-        // console.log(parsedUser.data);
+ 
       } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
+        toast.error(`Error parsing user data from local storage: ${error}`);
       }
     }
   }, []);
@@ -145,7 +144,7 @@ const EmployeeDetails = () => {
       try {
         const parsedUser = JSON.parse(storedUser);
       } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
+        toast.error(`Error parsing user data from local storage: ${error}`);
       }
     }
   });
@@ -157,7 +156,7 @@ const EmployeeDetails = () => {
       try {
         var parsedUser = JSON.parse(storedUser);
       } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
+        toast.error(`Error parsing user data from local storage: ${error}`);
       }
     }
 
@@ -198,7 +197,7 @@ const EmployeeDetails = () => {
       try {
         var parsedUser = JSON.parse(storedUser);
       } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
+        toast.error(`Error parsing user data from local storage: ${error}`);
       }
     }
 
@@ -226,9 +225,7 @@ const EmployeeDetails = () => {
   };
 
   useEffect(() => {
-    console.log("First Name:", firstName);
-    console.log("Phone Number:", phoneNumber);
-    console.log("Date of Birth:", dob);
+
 
     if (firstName && phoneNumber && dob) {
       setTimeout(() => {
@@ -237,7 +234,6 @@ const EmployeeDetails = () => {
           -4
         )}${dobPart}`;
         setEmployeeCode(code);
-        console.log("Generated Employee Code:", code);
       }, 100); // Small delay to ensure state updates
     }
   }, [firstName, phoneNumber, dob]);

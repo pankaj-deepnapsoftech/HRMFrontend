@@ -18,7 +18,7 @@ const EmpReqLeaveStatus = () => {
 
   // Use EmployeeContext to get the employee data
   const { employees } = useContext(EmployeeContext);
-  console.log(employees || []);
+
 
   // Get employee data from localStorage
   useEffect(() => {
@@ -30,10 +30,9 @@ const EmpReqLeaveStatus = () => {
         const userData = JSON.parse(presentUser);
         setPresentDates(userData.data.userResponse.attendance || []);
         setAssets(userData.data.userResponse.assets || []);
-        console.log(userData.data.userResponse.attendance || []);
-        console.log(userData.data.userResponse.attendance);
+
       } catch (error) {
-        console.log("User data not found", error);
+        toast.error(`User data not found:  ${error}`);
       }
     }
 
@@ -45,7 +44,7 @@ const EmpReqLeaveStatus = () => {
         setRequestLeave(parsedUser.data.requestLeave || []);
         setReason(parsedUser.data.requestLeave[0]?.fullLeave);
       } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
+        toast.error(`Error parsing user data from local storage: ${error}`);
       }
     }
   }, []);

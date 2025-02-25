@@ -15,8 +15,7 @@ const EmpAllLeave = () => {
       );
       setAllUsers(response.data.data.user);
     } catch (error) {
-      console.error("Error fetching registered users:", error);
-      alert("Failed to fetch user data.");
+      toast.error("Failed to fetch user data.");
     }
   };
 

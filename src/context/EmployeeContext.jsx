@@ -24,7 +24,7 @@ export const EmployeeProvider = ({ children }) => {
       // state to get total numbers of employee
       setTotalEmployee(response.data.data.totalEmployees);
     } catch (error) {
-      console.error("Error fetching employees:", error);
+      toast.error(`Error fetching employees: ${error}`);
     }
   };
 

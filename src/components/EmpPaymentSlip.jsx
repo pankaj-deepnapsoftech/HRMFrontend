@@ -32,7 +32,7 @@ const EmpPaymentSlip = () => {
       const fund = (userData.salary * FUND_PERCENTAGE) / 100;
 
       const totalSalary = userData.salary - fund;
-      console.log(totalSalary);
+
 
       setEmployee({ ...userData, workingDays: presentDays, fund, totalSalary });
     }
@@ -97,7 +97,7 @@ const EmpPaymentSlip = () => {
     const breakdownStartY = startY + details.length * 8 + 12;
     doc.setFont("helvetica", "bold");
     doc.text("Salary Breakdown", 14, breakdownStartY);
-    
+
     const incentive = employee?.incentive?.reduce(
       (sum, inc) => sum + inc.amount,
       0

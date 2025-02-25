@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import EmployeeDetails from "./components/employeeDetails";
 import TimeSheet from "./components/TimeSheet";
 import Projects from "./components/Projects";
 import Reports from "./components/Reports";
@@ -48,6 +47,7 @@ import ReviewShowCauseNotice from "./components/ReviewShowCauseNotice";
 import Incentives from "./components/payroll/Incentives";
 import Reimbursements from "./components/payroll/Reimbursements";
 import PayrollSummary from "./components/payroll/PayrollSummary";
+import EmployeeDetails from "./components/EmployeeDetails";
 
 const App = () => {
   const [authToken, setAuthToken] = useState(null);
@@ -70,7 +70,7 @@ const App = () => {
           const parsedAdmin = JSON.parse(adminToken);
           setAuthToken(parsedAdmin?.data?.accessToken || "");
         } catch (error) {
-          console.error("Error parsing admin token:", error);
+          toast.error( `Error parsing admin token: ${error}`);
         }
       }
 
@@ -79,7 +79,7 @@ const App = () => {
           const parsedEmployee = JSON.parse(employeeToken);
           setEmpAuthToken(parsedEmployee?.data?.accessToken || "");
         } catch (error) {
-          console.error("Error parsing employee token:", error);
+          toast.error(`Error parsing employee token: ${error}`);
         }
       }
 

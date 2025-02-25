@@ -4,8 +4,6 @@ const ViewIncentives = ({ empData, type }) => {
   const [incentives, setIncentives] = useState([]);
   const [reimbursements, setReimbursements] = useState([]);
 
-  console.log(empData);
-
   useEffect(() => {
     if (type === "Incentives" && empData?.incentive) {
       setIncentives(empData?.incentive);

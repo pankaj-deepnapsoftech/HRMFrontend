@@ -43,7 +43,7 @@ const GatepassApproval = () => {
         setRefresh();
         setRequests(allRequests);
       } catch (error) {
-        console.error("Error fetching gate pass requests:", error);
+        toast.error(`Error fetching gate pass requests: ${error}`);
       } finally {
         setLoading(false);
       }
@@ -73,7 +73,6 @@ const GatepassApproval = () => {
         autoClose: 1000,
       });
     } catch (error) {
-      console.error("Error approving/rejecting gate pass:", error);
       toast.error("Failed to approve/reject gate pass", {
         position: "top-right",
         autoClose: 1000,

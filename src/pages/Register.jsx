@@ -52,7 +52,7 @@ const Register = () => {
           },
         }
       );
-      console.log(response.data);
+
 
       // Store user data in local storage
       localStorage.setItem("registerUser", JSON.stringify(response.data));

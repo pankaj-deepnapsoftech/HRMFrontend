@@ -65,7 +65,7 @@ const EmpSalaryManagement = () => {
         });
         setEmployeeData(initialEmployeeData);
       } catch (error) {
-        console.error("Error fetching employees:", error);
+        toast.error(`Error fetching employees: ${error}`);
       }
     };
 

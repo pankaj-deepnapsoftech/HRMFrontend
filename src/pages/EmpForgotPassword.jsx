@@ -32,7 +32,6 @@ const RequestOTP = ({ onRequestSuccess }) => {
       }
       setLoading(false);
     } catch (error) {
-      console.log("Error in handleRequestOTP:", error);
       setMessage("An error occurred. Please try again.");
       setLoading(false);
     }

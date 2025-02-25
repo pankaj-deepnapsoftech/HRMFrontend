@@ -45,7 +45,7 @@ const Login = () => {
         window.location.reload(); // Ensures the page reloads after login
       }, 3100);
     } catch (error) {
-      console.log("Login failed", error);
+
       toast.error(
         error.response.data.message || "Login failed. Please try again.",
         {

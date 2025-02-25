@@ -19,7 +19,7 @@ const EmpLocation = () => {
       );
       setAllUser(response.data.data.user);
     } catch (error) {
-      console.error("Error fetching registered users:", error);
+      toast.error(`Error fetching registered users: ${error}`);
     }
   };
 
@@ -34,7 +34,7 @@ const EmpLocation = () => {
           location
         )}.json?access_token=${import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}`
       );
-      console.log(response.data);
+
 
       const data = await response.data;
       const place = data.features[0];
@@ -43,12 +43,12 @@ const EmpLocation = () => {
         setSelectedUserLocation(coordinates);
         setIsModalOpen(true);
       } else {
-        console.error("Location not found.");
+        toast.error("Location not found.");
         setSelectedUserLocation(null);
       }
-      console.log({ data, place });
+
     } catch (error) {
-      console.error("Error fetching location:", error);
+      toast.error(`Error fetching location: ${error}`);
     }
   };
 
@@ -62,7 +62,7 @@ const EmpLocation = () => {
         zoom: 13,
       });
 
-      console.log(selectedUserLocation);
+
       new mapboxgl.Marker()
         .setLngLat([selectedUserLocation[0], selectedUserLocation[1]])
         .addTo(map);

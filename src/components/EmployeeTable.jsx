@@ -27,7 +27,7 @@ const EmployeeTable = () => {
       );
       setAllUser(response.data.data.user);
     } catch (error) {
-      console.log("Error fetching registered users:", error);
+      toast.error(`Error fetching registered users: ${error}`);
     }
   };
 
@@ -47,7 +47,6 @@ const EmployeeTable = () => {
         });
       }
     } catch (error) {
-      console.error("Error deleting employee:", error);
       toast.error("Employee not deleted. Please try again.", {
         position: "top-right",
         autoClose: 1000,
@@ -94,7 +93,7 @@ const EmployeeTable = () => {
       );
     } catch (error) {
       toast.error("Error updating employee details.");
-      console.error(error);
+
     }
   };
 

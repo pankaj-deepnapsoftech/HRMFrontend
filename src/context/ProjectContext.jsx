@@ -17,7 +17,7 @@ export const ProjectProvider = ({ children }) => {
       setProjectDetails(response.data.data.projectDetails);
       setTotalProject(response.data.data.totalProjects);
     } catch (error) {
-      console.log("Project does not created", error);
+      toast.error( `Project does not created:  ${error}`);
     }
   };
 

@@ -22,7 +22,19 @@ const Reports = () => {
       Department: employee.department || "",
       Designation: employee.role || "",
       JoiningDate: employee.date || "",
-      Salary: employee.salary || "",
+      BasicSlary: employee.salary || "",
+      Incentives: employee.incentive.reduce(
+        (sum, inc) => sum + inc.amount,
+        0
+      ) || "",
+      Reimbursement: employee.reimbursement.reduce(
+        (sum, rem) => sum + rem.amount,
+        0
+      ) || "",
+      Advance : employee.advanceRequests.reduce(
+        (sum, rem) => sum + rem.amount,
+        0
+      ) || "",
       EmpStatus: employee.Empstatus || "",
       Assets: (employee.assets || []).join(", "),
       Attendance: employee.attendance

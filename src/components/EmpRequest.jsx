@@ -7,8 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 const EmpRequest = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [halfLeave, setHalfLeave] = useState(false); // Store as boolean (checkbox)
-  const [fullLeave, setFullLeave] = useState(""); // Full leave reason (optional text)
+  const [halfLeave, setHalfLeave] = useState(false);
+  const [fullLeave, setFullLeave] = useState("");
   const [leaveType, setLeaveType] = useState("");
   const [reason, setReason] = useState("");
   const [username, setUserName] = useState("");
@@ -17,8 +17,7 @@ const EmpRequest = () => {
     halfDayLeaves: 0,
     fullDayLeaves: 0,
   });
-  const [presentDates, setPresentDates] = useState("");
-  const [employees, setEmployee] = useState("");
+
   // Load user information from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("employeeLogin");
@@ -26,52 +25,52 @@ const EmpRequest = () => {
       const parsedUser = JSON.parse(storedUser);
       setUserName(parsedUser.data.firstName);
       setEmployeeId(parsedUser.data.userResponse._id);
-      console.log(parsedUser.data);
     }
   }, []);
 
-  // Fetch the leave limits when employeeId is available
-  useEffect(() => {
-    console.log(employeeId);
-    const fetchLeaveLimits = async () => {
-      if (!employeeId) {
-        console.warn("Employee ID is not set yet.");
-        return;
-      }
-      const url = `${
-        import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
-      }/api/v1/user/${employeeId}/leave/limits`;
-      console.log("Fetching leave limits from URL:", url);
-      try {
-        const response = await axios.get(url);
-        setLeaveLimits(response.data.leaveLimits);
-        console.log(response.data.leaveLimits);
-      } catch (error) {
-        console.error(
-          "Error fetching leave limits:",
-          error.response?.data || error.message
-        );
-        toast.error("Failed to fetch leave limits", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      }
-    };
+  // Fetch the leave limits whenever the employee ID is available
+  const fetchLeaveLimits = async () => {
+    if (!employeeId) {
+      console.warn("Employee ID is not set yet.");
+      return;
+    }
 
+    const url = `${
+      import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+    }/api/v1/user/${employeeId}/leave/limits`;
+    console.log("Fetching leave limits from URL:", url);
+
+    try {
+      const response = await axios.get(url);
+      console.log("Fetched leave limits:", response.data.leaveLimits);
+      setLeaveLimits(response.data.leaveLimits); // Ensure state updates with new values
+    } catch (error) {
+      console.error(
+        "Error fetching leave limits:",
+        error.response?.data || error.message
+      );
+      toast.error("Failed to fetch leave limits", { autoClose: 3000 });
+    }
+  };
+
+  useEffect(() => {
     fetchLeaveLimits();
   }, [employeeId]);
 
+  // Handle leave request submission
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    // Check if half or full-day leaves exceed the limit
+    // Fetch the latest leave limits
+    await fetchLeaveLimits();
+
+    console.log("Leave limits after fetch:", leaveLimits);
+
+    // Validate available leave balance dynamically
     if (halfLeave && leaveLimits.halfDayLeaves <= 0) {
       toast.error(
         `You have exhausted your ${leaveLimits.halfDayLeaves} half-day leaves for this month.`,
-        {
-          position: "top-right",
-          autoClose: 1000,
-        }
+        { autoClose: 1000 }
       );
       return;
     }
@@ -79,24 +78,18 @@ const EmpRequest = () => {
     if (fullLeave && leaveLimits.fullDayLeaves <= 0) {
       toast.error(
         `You have exhausted your ${leaveLimits.fullDayLeaves} full-day leaves for this month.`,
-        {
-          position: "top-right",
-          autoClose: 1000,
-        }
+        { autoClose: 1000 }
       );
       return;
     }
 
-    // Construct the leave request payload
     const leaveObj = {
       fromDate,
       toDate,
-      halfLeave: halfLeave ? "halfday" : undefined, // Only send 'halfday' if checkbox is checked
-      fullLeave, // Send reason if provided
+      halfLeave: halfLeave ? "halfday" : undefined,
+      fullLeave,
       leaveType,
     };
-
-    console.log("Submitting leave request with payload:", leaveObj);
 
     try {
       const response = await axios.post(
@@ -104,32 +97,27 @@ const EmpRequest = () => {
           import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
         }/api/v1/user/${employeeId}/request/leave`,
         leaveObj,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
-      console.log("Leave request submitted successfully:", response.data);
-      localStorage.setItem("reqLeave", JSON.stringify(response.data));
+
       toast.success("Leave request submitted successfully", {
-        position: "top-right",
         autoClose: 1000,
       });
+
+      // Refresh leave limits to reflect the updated balance
+      await fetchLeaveLimits();
     } catch (error) {
-      console.error("Error response:", error.response?.data || error.message);
+      console.error("Error:", error.response?.data || error.message);
       toast.error(
-        error.response?.data?.message || "Request leave submission failed",
-        { position: "top-right", autoClose: 1000 }
+        error.response?.data?.message || "Request submission failed",
+        { autoClose: 1000 }
       );
     }
   };
 
-  // Function to format dates
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString(); // Formats the date to a readable string
-  };
+  useEffect(() => {
+    console.log("Updated leave limits:", leaveLimits);
+  }, [leaveLimits]); // This will log updated values whenever state changes
 
   return (
     <>
@@ -149,14 +137,14 @@ const EmpRequest = () => {
                 <div>
                   <label
                     htmlFor="fromDate"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     From Date<span className="text-red-500">*</span>
                   </label>
                   <input
                     type="date"
                     id="fromDate"
-                    className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                    className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"
                     required
                     onChange={(e) => setFromDate(e.target.value)}
                   />
@@ -165,14 +153,14 @@ const EmpRequest = () => {
                 <div>
                   <label
                     htmlFor="toDate"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     To Date<span className="text-red-500">*</span>
                   </label>
                   <input
                     type="date"
                     id="toDate"
-                    className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                    className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"
                     onChange={(e) => setToDate(e.target.value)}
                   />
                 </div>
@@ -180,12 +168,11 @@ const EmpRequest = () => {
                 <div>
                   <label
                     htmlFor="halfLeave"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
-                    Request leave for half day <br />
+                    Request Half-Day Leave <br />
                     <span className="text-gray-400">
-                      You can get only {leaveLimits.halfDayLeaves} half-day
-                      leaves
+                      Available: {leaveLimits.halfDayLeaves} half-day leaves
                     </span>
                   </label>
                   <input
@@ -212,13 +199,13 @@ const EmpRequest = () => {
                 <div>
                   <label
                     htmlFor="leaveType"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Leave Type<span className="text-red-500">*</span>
                   </label>
                   <select
                     id="leaveType"
-                    className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                    className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"
                     required
                     onChange={(e) => setReason(e.target.value)}
                   >
@@ -235,13 +222,13 @@ const EmpRequest = () => {
               <div>
                 <label
                   htmlFor="fullLeave"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  className="block mb-2 text-sm font-medium text-gray-900"
                 >
-                  Reason for leave
+                  Reason for Leave
                 </label>
                 <textarea
                   id="fullLeave"
-                  className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                  className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"
                   cols={53}
                   rows={4}
                   placeholder="Write Reason Here..."
@@ -251,7 +238,7 @@ const EmpRequest = () => {
 
               <button
                 type="submit"
-                className="text-white bg-blue-700 mt-4 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5"
+                className="text-white bg-blue-700 mt-4 hover:bg-blue-800 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5"
               >
                 Submit
               </button>

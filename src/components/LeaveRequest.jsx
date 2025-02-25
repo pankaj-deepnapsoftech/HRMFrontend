@@ -61,14 +61,13 @@ const LeaveRequest = () => {
         { userId, leaveId, status }
       );
 
-      const updatedEmployee = response.data.updatedEmployee;
-      console.log(updatedEmployee);
+      const updatedEmployee = response.data.updatedEmployee;  
 
       // Update the state with the updated employee data
       setAllUsers((prevUsers) =>
         prevUsers.map((user) => (user._id === userId ? updatedEmployee : user))
       );
-
+      fetchAllUsers();
       toast.success(`Leave Request ${status} Successfully`, {
         position: "top-right",
         autoClose: 1000,

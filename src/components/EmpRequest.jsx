@@ -42,8 +42,8 @@ const EmpRequest = () => {
 
     try {
       const response = await axios.get(url);
-      console.log("Fetched leave limits:", response.data.leaveLimits);
-      setLeaveLimits(response.data.leaveLimits);
+      console.log("Fetched leave limits:", response.data?.leaveLimits);
+      setLeaveLimits(response.data?.leaveLimits);
     } catch (error) {
       console.error(
         "Error fetching leave limits:",
@@ -178,11 +178,16 @@ const EmpRequest = () => {
                     htmlFor="halfLeave"
                     className="block mb-2 text-sm font-medium text-gray-900"
                   >
-                    Request Half-Day Leave <br />
+                    Request  Leave <br />
                     <span className="text-gray-400">
-                      Available: {leaveLimits.halfDayLeaves} half-day leaves
+                      Available: {leaveLimits?.halfDayLeaves} half-day leaves
+                    </span>
+                    <br />
+                    <span className="text-gray-400">
+                      Available: {leaveLimits?.fullDayLeaves} full-day leaves
                     </span>
                   </label>
+                 
 
                   <input
                     type="checkbox"

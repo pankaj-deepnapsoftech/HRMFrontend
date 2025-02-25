@@ -43,7 +43,7 @@ const EmpRequest = () => {
     try {
       const response = await axios.get(url);
       console.log("Fetched leave limits:", response.data.leaveLimits);
-      setLeaveLimits(response.data.leaveLimits); // Ensure state updates with new values
+      setLeaveLimits(response.data.leaveLimits);
     } catch (error) {
       console.error(
         "Error fetching leave limits:",
@@ -57,16 +57,16 @@ const EmpRequest = () => {
     fetchLeaveLimits();
   }, [employeeId]);
 
-  // Handle leave request submission
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    // Fetch the latest leave limits
+s
     await fetchLeaveLimits();
 
     console.log("Leave limits after fetch:", leaveLimits);
 
-    // Validate available leave balance dynamically
+
     if (halfLeave && leaveLimits.halfDayLeaves <= 0) {
       toast.error(
         `You have exhausted your ${leaveLimits.halfDayLeaves} half-day leaves for this month.`,
@@ -87,7 +87,8 @@ const EmpRequest = () => {
       fromDate,
       toDate,
       halfLeave: halfLeave ? "halfday" : undefined,
-      fullLeave,
+      fullLeave: fullLeave ? "fullday" : undefined,
+      reason,
       leaveType,
     };
 
@@ -104,7 +105,14 @@ const EmpRequest = () => {
         autoClose: 1000,
       });
 
-      // Refresh leave limits to reflect the updated balance
+      setFromDate("");
+      setToDate("");
+      setFullLeave("");
+      setHalfLeave("");
+      setLeaveType("");
+      setReason("");
+
+   
       await fetchLeaveLimits();
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
@@ -117,7 +125,7 @@ const EmpRequest = () => {
 
   useEffect(() => {
     console.log("Updated leave limits:", leaveLimits);
-  }, [leaveLimits]); // This will log updated values whenever state changes
+  }, [leaveLimits]);
 
   return (
     <>
@@ -175,11 +183,16 @@ const EmpRequest = () => {
                       Available: {leaveLimits.halfDayLeaves} half-day leaves
                     </span>
                   </label>
+
                   <input
                     type="checkbox"
                     id="halfLeave"
                     className="mr-2"
-                    onChange={(e) => setHalfLeave(e.target.checked)}
+                    checked={halfLeave}
+                    onChange={(e) => {
+                      setHalfLeave(e.target.checked);
+                      if (e.target.checked) setFullLeave(false);
+                    }}
                   />
                   <span className="text-gray-900 dark:text-gray-300">
                     Half Day
@@ -187,9 +200,13 @@ const EmpRequest = () => {
 
                   <input
                     type="checkbox"
-                    id="halfLeave"
+                    id="fullLeave"
                     className="mr-2 ml-4"
-                    onChange={(e) => setHalfLeave(e.target.checked)}
+                    checked={fullLeave}
+                    onChange={(e) => {
+                      setFullLeave(e.target.checked);
+                      if (e.target.checked) setHalfLeave(false);
+                    }}
                   />
                   <span className="text-gray-900 dark:text-gray-300">
                     Full Day
@@ -207,7 +224,7 @@ const EmpRequest = () => {
                     id="leaveType"
                     className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"
                     required
-                    onChange={(e) => setReason(e.target.value)}
+                    onChange={(e) => setLeaveType(e.target.value)}
                   >
                     <option value="">Select Leave Type</option>
                     <option value="sick">Sick Leave</option>
@@ -232,7 +249,7 @@ const EmpRequest = () => {
                   cols={53}
                   rows={4}
                   placeholder="Write Reason Here..."
-                  onChange={(e) => setFullLeave(e.target.value)}
+                  onChange={(e) => setReason(e.target.value)}
                 ></textarea>
               </div>
 

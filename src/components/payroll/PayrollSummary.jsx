@@ -21,6 +21,8 @@ const PayrollSummary = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewOpen, setViewOpen] = useState(false);
 
+  console.log(employees);
+
   const handleViewOpen = (employee) => {
     setSelectedEmployee(employee);
     setViewOpen(true);
@@ -33,6 +35,7 @@ const PayrollSummary = () => {
 
   const earningTitle = [
     "Basic Salary",
+    "Fund(12%)",
     "Incentives",
     "Reimbursement",
     "Advance",
@@ -102,7 +105,6 @@ const PayrollSummary = () => {
         </div>
       </div>
 
-
       <Dialog open={viewOpen} onClose={handleViewClose} fullWidth maxWidth="sm">
         <DialogTitle className="text-center text-xl font-semibold">
           Earning Details
@@ -114,9 +116,14 @@ const PayrollSummary = () => {
                 <TableBody>
                   {earningTitle.map((title, index) => {
                     let amount = 0;
+                    const FUND_PERCENTAGE = 12;
 
                     const basicSalary = selectedEmployee?.salary
                       ? Number(selectedEmployee.salary)
+                      : 0;
+
+                    const fund = selectedEmployee?.salary
+                      ? (selectedEmployee?.salary * FUND_PERCENTAGE) / 100
                       : 0;
 
                     const incentivesTotal = Array.isArray(
@@ -149,6 +156,9 @@ const PayrollSummary = () => {
                     if (title === "Basic Salary") {
                       amount = `₹ ${basicSalary.toFixed(2)}`;
                     }
+                    if (title === "Fund(12%)") {
+                      amount = `₹ ${fund.toFixed(2)}`;
+                    }
 
                     if (title === "Incentives") {
                       amount = `₹ ${incentivesTotal.toFixed(2)}`;
@@ -166,15 +176,29 @@ const PayrollSummary = () => {
                       const totalEarnings =
                         basicSalary +
                         incentivesTotal +
-                        reimbursementTotal +
-                        advanceTotal;
+                        reimbursementTotal -
+                        (fund + advanceTotal);
                       amount = `₹ ${totalEarnings.toFixed(2)}`;
                     }
 
                     return (
                       <TableRow key={index}>
                         <TableCell>{title}</TableCell>
-                        <TableCell align="right">{amount}</TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{
+                            color:
+                              title === "Fund(12%)" || title === "Advance"
+                                ? "red"
+                                : title === "Total Earning"
+                                ? "green"
+                                : "inherit",
+                            fontWeight:
+                              title === "Total Earning" ? "bold" : "normal",
+                          }}
+                        >
+                          {amount}
+                        </TableCell>
                       </TableRow>
                     );
                   })}

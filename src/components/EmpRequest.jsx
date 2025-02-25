@@ -10,6 +10,7 @@ const EmpRequest = () => {
   const [halfLeave, setHalfLeave] = useState(false); // Store as boolean (checkbox)
   const [fullLeave, setFullLeave] = useState(""); // Full leave reason (optional text)
   const [leaveType, setLeaveType] = useState("");
+  const [reason, setReason] = useState("");
   const [username, setUserName] = useState("");
   const [employeeId, setEmployeeId] = useState("");
   const [leaveLimits, setLeaveLimits] = useState({
@@ -196,6 +197,16 @@ const EmpRequest = () => {
                   <span className="text-gray-900 dark:text-gray-300">
                     Half Day
                   </span>
+
+                  <input
+                    type="checkbox"
+                    id="halfLeave"
+                    className="mr-2 ml-4"
+                    onChange={(e) => setHalfLeave(e.target.checked)}
+                  />
+                  <span className="text-gray-900 dark:text-gray-300">
+                    Full Day
+                  </span>
                 </div>
 
                 <div>
@@ -209,13 +220,14 @@ const EmpRequest = () => {
                     id="leaveType"
                     className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
                     required
-                    onChange={(e) => setLeaveType(e.target.value)}
+                    onChange={(e) => setReason(e.target.value)}
                   >
                     <option value="">Select Leave Type</option>
                     <option value="sick">Sick Leave</option>
                     <option value="casual">Casual Leave</option>
                     <option value="emergency">Emergency Leave</option>
                     <option value="vacation">Vacation</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
               </div>

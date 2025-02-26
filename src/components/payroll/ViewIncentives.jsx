@@ -53,7 +53,7 @@ const ViewIncentives = ({ empData, type }) => {
   };
 
   return (
-    <div className="p-4 bg-white shadow-lg rounded-lg max-w-4xl mx-auto mt-6">
+    <div className="p-4 bg-white shadow-lg rounded-lg max-w-4xl mx-auto overflow-x-scroll mt-6">
       <h1 className="text-2xl font-bold text-center text-gray-800">
         {empData?.firstName}'s {type}
       </h1>

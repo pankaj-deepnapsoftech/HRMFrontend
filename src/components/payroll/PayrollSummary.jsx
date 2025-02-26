@@ -42,6 +42,9 @@ const PayrollSummary = () => {
     "Total Earning",
   ];
 
+  console.log(selectedEmployee);
+  
+
   return (
     <div>
       <MainDashboard />
@@ -171,6 +174,8 @@ const PayrollSummary = () => {
                     if (title === "Advance") {
                       amount = `₹ ${advanceTotal.toFixed(2)}`;
                     }
+
+
 
                     if (title === "Total Earning") {
                       const totalEarnings =

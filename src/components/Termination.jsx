@@ -54,7 +54,6 @@ const Termination = () => {
                   <th className="px-6 py-3">Department</th>
                   <th className="px-6 py-3">Role</th>
                   <th className="px-6 py-3">Emp-code</th>
-                  <th className="px-6 py-3">Salary</th>
                   <th className="px-6 py-3">Assets</th>
                   <th className="px-6 py-3">Status</th>
                   <th className="px-6 py-3">Terminate</th>
@@ -76,8 +75,7 @@ const Termination = () => {
                       </td>
                       <td className="px-6 py-4">{user.department}</td>
                       <td className="px-6 py-4">{user.role}</td>
-                      <td className="px-6 py-4">{user.employeeCode}</td>
-                      <td className="px-6 py-4">{user.salary}</td>
+                      <td className="px-6 py-4">{user.employeeCode}</td>                
                       <td className="px-6 py-4">
                         <div className="flex flex-wrap gap-2">
                           {(user.assets || []).map((asset, index) => (

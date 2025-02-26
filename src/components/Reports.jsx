@@ -151,7 +151,7 @@ const Reports = () => {
                     <td className="px-4 py-3 text-center">
                       {item.gatePassRequests?.length || 0}
                     </td>
-                    <td className="px-4 py-3 text-center">{item.Empstatus}</td>
+                    <td className={`px-4 py-3 text-center ${item?.Empstatus === "active" ? "text-green-600" : "text-gray-600"}`}>{item.Empstatus}</td>
                   </tr>
                 ))
               ) : (

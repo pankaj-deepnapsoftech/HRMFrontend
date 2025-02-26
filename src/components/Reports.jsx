@@ -22,7 +22,7 @@ const Reports = () => {
       Department: employee.department || "",
       Designation: employee.role || "",
       JoiningDate: employee.date || "",
-      BasicSlary: employee.salary || "",
+      BasicSalary: employee.salary || "",
       Incentives: employee.incentive.reduce(
         (sum, inc) => sum + inc.amount,
         0

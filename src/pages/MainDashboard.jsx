@@ -161,7 +161,7 @@ export default function Dashboard() {
         ); // Log the response here
         setPresentCount(response.data.presentCount);
       } catch (err) {
-        toast.error(`An error occured: ${err}`)
+        toast.error(`An error occured: ${err}`);
       }
     };
     getPresentEmployee();
@@ -265,9 +265,12 @@ export default function Dashboard() {
   const [payrollOpen, setPayrollOpen] = useState(false);
 
   const handleAttendanceToggle = () => {
+    console.log("Toggling Attendance:", !attendanceOpen);
     setAttendanceOpen(!attendanceOpen);
   };
+  
   const handlePayrollToggle = () => {
+    console.log("Toggling Payroll:", !payrollOpen);
     setPayrollOpen(!payrollOpen);
   };
 
@@ -315,7 +318,7 @@ export default function Dashboard() {
       text: <span className="text-[1rem] font-semibold">Attendence</span>,
       icon: <MdCoPresent className="text-2xl" />,
       onClick: handleAttendanceToggle,
-      subMenu: [
+      subMenu:  attendanceOpen && [
         {
           text: (
             <span className="text-[1rem] font-semibold">Daily Attendence</span>
@@ -371,27 +374,31 @@ export default function Dashboard() {
       text: <span className="text-[1rem] font-semibold">Payroll</span>,
       icon: <RiMoneyRupeeCircleLine className="text-2xl" />,
       onClick: handlePayrollToggle,
-      subMenu: [
+      subMenu: payrollOpen &&  [
         {
-          text: <span className="text-[1rem] font-semibold">Payroll Summary</span>,
+          text: (
+            <span className="text-[1rem] font-semibold">Payroll Summary</span>
+          ),
           icon: <MdOutlineStickyNote2 className="text-2xl mr-2" />,
           path: "/employee/payrollSummary",
         },
         {
-          text: <span className="text-[1rem] font-semibold">Advanced Money</span>,
+          text: (
+            <span className="text-[1rem] font-semibold">Advanced Money</span>
+          ),
           icon: <TbReportMoney className="text-2xl mr-2" />,
           path: "/employee/advance/money/request",
         },
         {
-          text: (
-            <span className="text-[1rem] font-semibold">Incentives</span>
-          ),
-          icon: <GiMoneyStack  className="text-2xl mr-2" />,
+          text: <span className="text-[1rem] font-semibold">Incentives</span>,
+          icon: <GiMoneyStack className="text-2xl mr-2" />,
           path: "/employee/incentives",
         },
         {
-          text: <span className="text-[1rem] font-semibold">Reimbursements</span>,
-          icon: <GiTakeMyMoney  className="text-2xl mr-2" />,
+          text: (
+            <span className="text-[1rem] font-semibold">Reimbursements</span>
+          ),
+          icon: <GiTakeMyMoney className="text-2xl mr-2" />,
           path: "/employee/reimbursements",
         },
         {
@@ -399,7 +406,6 @@ export default function Dashboard() {
           icon: <RiSecurePaymentLine className="text-2xl mr-2" />,
           path: "/generate/employee/payslip",
         },
-        
       ],
     },
   ];
@@ -433,7 +439,6 @@ export default function Dashboard() {
                   to="/employee/request/leave/approval"
                 >
                   {" "}
-                 
                   <MdOutlinePendingActions className="text-2xl " />
                 </Link>
               </h3>
@@ -515,7 +520,7 @@ export default function Dashboard() {
           open={open}
           variant="permanent"
           sx={{
-            width: { xs: 60, sm: 100, md: 240 }, 
+            width: { xs: 60, sm: 100, md: 240 },
             flexShrink: 0,
             transition: "width 0.3s ease",
           }}
@@ -554,11 +559,11 @@ export default function Dashboard() {
                         minHeight: 55,
                         px: 1.5,
                         transition: "all 0.3s ease-in-out",
-                        color: "#333333", 
+                        color: "#333333",
                         "&:hover": {
                           backgroundColor: "#0080FC",
                           cursor: "pointer",
-                          color: "white", 
+                          color: "white",
                           borderRadius: "8px",
                         },
                         "&:hover .MuiListItemIcon-root, &:hover .MuiListItemText-primary":

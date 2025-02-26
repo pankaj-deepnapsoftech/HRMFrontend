@@ -15,7 +15,6 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
- 
 
 function EmpDashboard() {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -45,7 +44,7 @@ function EmpDashboard() {
         setEmail(parsedUser.data.userResponse.email);
         setEmployeeId(parsedUser.data.userResponse._id);
       } catch (error) {
-       toast.error(`An error occured!  - ${error}`)
+        toast.error(`An error occured!  - ${error}`);
       }
     }
   }, []);
@@ -92,26 +91,26 @@ function EmpDashboard() {
   }, []);
 
   // Second useEffect to fetch active time once empId is available
-  useEffect(() => {
-    if (empId) {
-      // Only run if empId is available
-      const fetchActiveTime = async () => {
-        try {
-          const response = await axios.get(
-            `${
-              import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
-            }/api/v1/user/employee/${empId}/active/time`
-          );
-          setActiveTime(response.data.activeTime); // Set active time to state
-        
-        } catch (error) {
-          toast.error(`Error fetching active time: ${error}`);
-        }
-      };
+  // useEffect(() => {
+  //   if (empId) {
+  //     // Only run if empId is available
+  //     const fetchActiveTime = async () => {
+  //       try {
+  //         const response = await axios.get(
+  //           `${
+  //             import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+  //           }/api/v1/user/employee/${empId}/active/time`
+  //         );
+  //         setActiveTime(response.data.activeTime); // Set active time to state
 
-      fetchActiveTime(); // Fetch active time on component mount
-    }
-  }, [empId]); // Dependency array includes empId to run only when empId changes
+  //       } catch (error) {
+  //         toast.error(`Error fetching active time: ${error}`);
+  //       }
+  //     };
+
+  //     fetchActiveTime(); // Fetch active time on component mount
+  //   }
+  // }, [empId]); // Dependency array includes empId to run only when empId changes
 
   return (
     <div>
@@ -313,7 +312,6 @@ function EmpDashboard() {
           </Container>
         </AppBar>
       </Box>
-      
     </div>
   );
 }

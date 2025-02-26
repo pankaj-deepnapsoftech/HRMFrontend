@@ -286,11 +286,6 @@ export default function Dashboard() {
       path: "/employee-details",
     },
     {
-      text: <span className="text-[1rem] font-semibold">Timesheet</span>,
-      icon: <SlCalender className="text-2xl " />,
-      path: "/timesheet",
-    },
-    {
       text: <span className="text-[1rem] font-semibold">Projects</span>,
       icon: <HiOutlineDocumentReport className="text-1xl " />,
       path: "/projects",

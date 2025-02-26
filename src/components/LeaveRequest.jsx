@@ -60,7 +60,7 @@ const LeaveRequest = () => {
         { userId, leaveId, status }
       );
 
-      const updatedEmployee = response.data.updatedEmployee;  
+      const updatedEmployee = response.data.updatedEmployee;
 
       // Update the state with the updated employee data
       setAllUsers((prevUsers) =>
@@ -78,6 +78,8 @@ const LeaveRequest = () => {
       });
     }
   };
+
+  console.log(allUsers);
 
   return (
     <div>
@@ -105,99 +107,106 @@ const LeaveRequest = () => {
             </thead>
             <tbody>
               {allUsers.length > 0 ? (
-                allUsers.map((user) => {
-                  const latestLeave = getLatestLeave(user?.requestLeave);
+                allUsers
+                  .filter(
+                    (user) =>
+                      user?.requestLeave && user?.requestLeave.length > 0
+                  ) 
+                  .map((user) => {
+                    const latestLeave = getLatestLeave(user?.requestLeave);
 
-                  return (
-                    <tr
-                      key={user?._id}
-                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                    >
-                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                        {user?.firstName} {user?.lastName}
-                      </td>
-                      <td className="px-6 py-4">{user?.email}</td>
-                      <td className="px-6 py-4">{user?.department}</td>
-                      <td className="px-6 py-4">{user?.role}</td>
-                      <td className="px-6 py-4">{user?.employeeCode}</td>
-                      <td className="px-6 py-4">
-                        {latestLeave
-                          ? latestLeave?.fullLeave
-                            ? "Full Day"
-                            : "Half Day"
-                          : "N/A"}
-                      </td>
-                      <td className="px-6 py-4">
-                        {latestLeave
-                          ? new Date(latestLeave?.fromDate).toLocaleDateString()
-                          : "N/A"}
-                      </td>
-                      <td className="px-6 py-4">
-                        {latestLeave?.toDate
-                          ? new Date(latestLeave?.toDate).toLocaleDateString()
-                          : "N/A"}
-                      </td>
-                      <td className="px-6 py-4">
-                        {latestLeave?.reason || "N/A"}
-                      </td>
-                      <td className="px-6 py-4">
-                        {latestLeave?.status || "Pending"}
-                      </td>
-                      <td className="px-6 py-4 flex justify-center gap-2 items-center">
-                        <Button
-                          variant="contained"
-                          color="success"
-                          onClick={() =>
-                            handleLeaveStatusUpdate(
-                              user._id,
-                              latestLeave?._id,
-                              "Approved"
-                            )
-                          }
-                          className="text-green-500 hover:underline"
-                          disabled={
-                            !latestLeave || latestLeave?.status === "Approved"
-                          }
-                        >
-                          Approve
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={() =>
-                            handleLeaveStatusUpdate(
-                              user._id,
-                              latestLeave?._id,
-                              "Rejected"
-                            )
-                          }
-                          className="text-red-500 hover:underline"
-                          disabled={
-                            !latestLeave || latestLeave?.status === "Rejected"
-                          }
-                        >
-                          Reject
-                        </Button>
-                        <Button
-                          variant="contained"
-                          onClick={() =>
-                            handleLeaveStatusUpdate(
-                              user._id,
-                              latestLeave?._id,
-                              "Pending"
-                            )
-                          }
-                          className="text-yellow-500 hover:underline"
-                          disabled={
-                            !latestLeave || latestLeave?.status === "Pending"
-                          }
-                        >
-                          Pending
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })
+                    return (
+                      <tr
+                        key={user?._id}
+                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                      >
+                        <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                          {user?.firstName} {user?.lastName}
+                        </td>
+                        <td className="px-6 py-4">{user?.email}</td>
+                        <td className="px-6 py-4">{user?.department}</td>
+                        <td className="px-6 py-4">{user?.role}</td>
+                        <td className="px-6 py-4">{user?.employeeCode}</td>
+                        <td className="px-6 py-4">
+                          {latestLeave
+                            ? latestLeave?.fullLeave
+                              ? "Full Day"
+                              : "Half Day"
+                            : "N/A"}
+                        </td>
+                        <td className="px-6 py-4">
+                          {latestLeave
+                            ? new Date(
+                                latestLeave?.fromDate
+                              ).toLocaleDateString()
+                            : "N/A"}
+                        </td>
+                        <td className="px-6 py-4">
+                          {latestLeave?.toDate
+                            ? new Date(latestLeave?.toDate).toLocaleDateString()
+                            : "N/A"}
+                        </td>
+                        <td className="px-6 py-4">
+                          {latestLeave?.reason || "N/A"}
+                        </td>
+                        <td className="px-6 py-4">
+                          {latestLeave?.status || "Pending"}
+                        </td>
+                        <td className="px-6 py-4 flex justify-center gap-2 items-center">
+                          <Button
+                            variant="contained"
+                            color="success"
+                            onClick={() =>
+                              handleLeaveStatusUpdate(
+                                user._id,
+                                latestLeave?._id,
+                                "Approved"
+                              )
+                            }
+                            className="text-green-500 hover:underline"
+                            disabled={
+                              !latestLeave || latestLeave?.status === "Approved"
+                            }
+                          >
+                            Approve
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() =>
+                              handleLeaveStatusUpdate(
+                                user._id,
+                                latestLeave?._id,
+                                "Rejected"
+                              )
+                            }
+                            className="text-red-500 hover:underline"
+                            disabled={
+                              !latestLeave || latestLeave?.status === "Rejected"
+                            }
+                          >
+                            Reject
+                          </Button>
+                          <Button
+                            variant="contained"
+                            onClick={() =>
+                              handleLeaveStatusUpdate(
+                                user._id,
+                                latestLeave?._id,
+                                "Pending"
+                              )
+                            }
+                            className="text-yellow-500 hover:underline"
+                            disabled={
+                              !latestLeave || latestLeave?.status === "Pending"
+                            }
+                          >
+                            Pending
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })
               ) : (
                 <tr>
                   <td

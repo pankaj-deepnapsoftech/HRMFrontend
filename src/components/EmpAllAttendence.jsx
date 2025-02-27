@@ -77,59 +77,61 @@ const EmpAllAttendence = () => {
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center px-4 pt-6 lg:ml-[14rem] xs:ml-[5rem] gap-4">
-        <h1 className="text-2xl font-bold">All Employee Attendance</h1>
-        <div className="flex items-center gap-4">
-          <label htmlFor="month-picker" className="text-gray-700">
-            Filter by Month:
-          </label>
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            dateFormat="MMMM yyyy"
-            showMonthYearPicker
-            className="border rounded-lg px-2 py-1"
-          />
+        <div className="flex flex-col items-center px-3 gap-4 w-full">
+        <h1 className="text-2xl font-bold  w-full ">All Employee Attendance</h1>
+        <div className=" flex items-center justify-between  gap-2 w-full ">
+          <div className="flex items-center gap-4">
+            <label htmlFor="month-picker" className="text-gray-700">
+              Filter by Month:
+            </label>
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              dateFormat="MMMM yyyy"
+              showMonthYearPicker
+              className="border rounded-lg px-2 py-1"
+            />
+          </div>
+          <div className="flex items-center gap-4">
+            <label htmlFor="department-picker" className="text-gray-700">
+              Filter by Department:
+            </label>
+            <select
+              id="department-picker"
+              value={selectedDepartment}
+              onChange={(e) => setSelectedDepartment(e.target.value)}
+              className="border rounded-lg px-2 py-1"
+            >
+              {uniqueDepartments.map((dept) => (
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
+              ))}
+            </select>
+          </div>
+          <Button
+          onClick={handleExport}
+          className="bg-blue-500 text-white hover:bg-blue-600  "
+        >
+          Export
+        </Button>
         </div>
-        <div className="flex items-center gap-4">
-          <label htmlFor="department-picker" className="text-gray-700">
-            Filter by Department:
-          </label>
-          <select
-            id="department-picker"
-            value={selectedDepartment}
-            onChange={(e) => setSelectedDepartment(e.target.value)}
-            className="border rounded-lg px-2 py-1"
-          >
-            {uniqueDepartments.map((dept) => (
-              <option key={dept} value={dept}>
-                {dept}
-              </option>
-            ))}
-          </select>
         </div>
+      
       </div>
 
       {/* Attendance Table */}
       <div className="relative lg:ml-[14rem] xs:ml-[5rem] overflow-x-auto pt-10 px-4 sm:px-6 lg:px-8 p-4">
+       
         <table className="w-full bg-white text-sm text-left text-gray-600 rounded-lg shadow-lg">
           <thead className="text-xs uppercase bg-gray-100 text-gray-700">
             <tr>
               <th className="px-6 py-3">Name</th>
-              <th className="px-6 py-3">Location</th>
               <th className="px-6 py-3">Department</th>
               <th className="px-6 py-3">Role</th>
               <th className="px-6 py-3">Salary</th>
               <th className="px-6 py-3">Present Days</th>
               <th className="px-6 py-3">Absent Days</th>
-
-              <th className="px-6 py-3 text-right">
-                <Button
-                  onClick={handleExport}
-                  className="bg-blue-500 text-white hover:bg-blue-600"
-                >
-                  Export
-                </Button>
-              </th>
             </tr>
           </thead>
           <tbody>
@@ -151,23 +153,21 @@ const EmpAllAttendence = () => {
 
                 return (
                   <tr
-                  key={item.employeeId}
-                  className={`border-b transition-all ${
-                    item.Empstatus === "terminated"
-                      ? "bg-gray-100 text-gray-400"
-                      : "bg-white"
-                  }`}
+                    key={item.employeeId}
+                    className={`border-b transition-all ${
+                      item.Empstatus === "terminated"
+                        ? "bg-gray-100 text-gray-400"
+                        : "bg-white"
+                    }`}
                   >
                     <td className="px-6 py-4 font-medium text-gray-900">
                       {item.firstName} {item.lastName}
                     </td>
-                    <td className="px-6 py-4">{item.location}</td>
                     <td className="px-6 py-4">{item.department}</td>
                     <td className="px-6 py-4">{item.role}</td>
                     <td className="px-6 py-4">{item.salary}</td>
                     <td className="px-6 py-4">{presentDays}</td>
                     <td className="px-6 py-4">{absentDays}</td>
-                    <td className="px-6 py-4"></td>
                   </tr>
                 );
               })

@@ -41,9 +41,7 @@ const Payroll = () => {
           }/api/v1/user/get/advanced/eligiblity`
         );
         setAdvanceEligibilityYears(response.data.advanceEligibilityYears || 0);
-      
       } catch (error) {
-     
         toast.error("Failed to load eligibility settings.");
       }
     };
@@ -68,7 +66,6 @@ const Payroll = () => {
         autoClose: 1000,
       });
     } catch (error) {
-
       toast.error("Failed to update eligibility settings.");
     }
   };
@@ -93,7 +90,6 @@ const Payroll = () => {
         ),
       }));
     } catch (error) {
-
       toast.error(
         error.response.data.message || "Failed to approve advance request.",
         {
@@ -121,7 +117,6 @@ const Payroll = () => {
         ),
       }));
     } catch (error) {
-
       toast.error("Failed to reject advance request.");
     }
   };
@@ -149,7 +144,6 @@ const Payroll = () => {
         }
       );
 
-
       toast.success("Advance request updated successfully!", {
         position: "top-right",
         autoClose: 1000,
@@ -170,7 +164,6 @@ const Payroll = () => {
       setEditingRequest(null);
       setEditedAmount("");
     } catch (error) {
-      
       toast.error(
         error.response.data.message || "Failed to update advance request.",
         {
@@ -180,6 +173,8 @@ const Payroll = () => {
       );
     }
   };
+
+  console.log(employees);
 
   return (
     <>
@@ -214,7 +209,9 @@ const Payroll = () => {
             </div>
           </div>
 
-          {employees.length > 0 ? (
+          {employees.filter(
+            (employee) => (advanceRequests[employee._id] || []).length > 0
+          ).length > 0 ? (
             <div className="mt-6 overflow-x-auto">
               <table className="min-w-full bg-white border-collapse border border-gray-200 rounded-lg shadow-md">
                 <thead>
@@ -229,129 +226,146 @@ const Payroll = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {employees.map((employee) => {
-                    const requests = advanceRequests[employee._id] || [];
-                    return (
-                      <tr
-                        key={employee._id}
-                        className="hover:bg-gray-100 transition-colors"
-                      >
-                        {/* Employee Details */}
-                        <td className="py-4 px-4 border-b text-gray-800 text-center">
-                          {employee.firstName} {employee.lastName}
-                        </td>
-                        <td className="py-4 px-4 border-b text-gray-500 text-center">
-                          {employee.role}
-                        </td>
-                        <td className="py-4 px-4 border-b text-gray-800 text-center">
-                          ₹ {employee.salary}
-                        </td>
-                        <td className="py-4 px-4 border-b text-gray-500 text-center">
-                          {dayjs(employee.date).format("DD MMM YYYY")}
-                        </td>
+                  {employees
+                    .filter(
+                      (employee) =>
+                        (advanceRequests[employee._id] || []).length > 0
+                    ) // Filter employees with requests
+                    .map((employee) => {
+                      const requests = advanceRequests[employee._id] || [];
 
-                        {/* Advance Requests */}
-                        <td className="py-4 px-4  border-b text-gray-800">
-                          {requests.length > 0 ? (
-                            <div className="space-y-4">
-                              {requests.map((req) => (
-                                <div
-                                  key={req._id}
-                                  className="lg:p-3 xs:p-8 xs:px-[2rem] border rounded-lg bg-gray-50 shadow-sm"
-                                >
-                                  <p>
-                                    <strong>Amount:</strong> ₹ {req.amount}
-                                  </p>
-                                  <p>
-                                    <strong className="capitalize">
-                                      Reason:
-                                    </strong>{" "}
-                                    {req.reason}
-                                  </p>
-                                  <p className="capitalize">
-                                    <strong>Status:</strong>{" "}
-                                    <span
-                                      className={
-                                        req.status === "Approved"
-                                          ? "text-green-600"
-                                          : req.status === "Rejected"
-                                          ? "text-red-600"
-                                          : "text-yellow-600"
-                                      }
-                                    >
-                                      {req.status}
-                                    </span>
-                                  </p>
-                                  <p className="text-sm text-gray-500">
-                                    Requested on:{" "}
-                                    {dayjs(req.requestDate).format(
-                                      "DD MMM YYYY"
+                      return (
+                        <tr
+                          key={employee._id}
+                          className="hover:bg-gray-100 transition-colors"
+                        >
+                          {/* Employee Details */}
+                          <td className="py-4 px-4 border-b text-gray-800 text-center">
+                            {employee.firstName} {employee.lastName}
+                          </td>
+                          <td className="py-4 px-4 border-b text-gray-500 text-center">
+                            {employee.role}
+                          </td>
+                          <td className="py-4 px-4 border-b text-gray-800 text-center">
+                            ₹ {employee.salary}
+                          </td>
+                          <td className="py-4 px-4 border-b text-gray-500 text-center">
+                            {dayjs(employee.date).format("DD MMM YYYY")}
+                          </td>
+
+                          {/* Advance Requests */}
+                          <td className="py-4 px-4  border-b text-gray-800">
+                            {requests.length > 0 ? (
+                              <div className="space-y-4">
+                                {requests.map((req) => (
+                                  <div
+                                    key={req._id}
+                                    className="lg:p-3 xs:p-8 xs:px-[2rem] border rounded-lg bg-gray-50 shadow-sm"
+                                  >
+                                    <p>
+                                      <strong>Amount:</strong> ₹ {req.amount}
+                                    </p>
+                                    <p>
+                                      <strong className="capitalize">
+                                        Reason:
+                                      </strong>{" "}
+                                      {req.reason}
+                                    </p>
+                                    <p className="capitalize">
+                                      <strong>Status:</strong>{" "}
+                                      <span
+                                        className={
+                                          req.status === "Approved"
+                                            ? "text-green-600"
+                                            : req.status === "Rejected"
+                                            ? "text-red-600"
+                                            : "text-yellow-600"
+                                        }
+                                      >
+                                        {req.status}
+                                      </span>
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                      Requested on:{" "}
+                                      {dayjs(req.requestDate).format(
+                                        "DD MMM YYYY"
+                                      )}
+                                    </p>
+                                    {req.status === "pending" && (
+                                      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mt-3">
+                                        <button
+                                          className="bg-green-600 text-white py-1 px-3 rounded-lg hover:bg-green-700 transition-all w-full sm:w-auto"
+                                          onClick={() =>
+                                            handleApproveRequest(
+                                              employee._id,
+                                              req._id
+                                            )
+                                          }
+                                        >
+                                          Approve
+                                        </button>
+                                        <button
+                                          className="bg-red-700 text-white py-1 px-3 rounded-lg hover:bg-red-800 transition-all w-full sm:w-auto"
+                                          onClick={() =>
+                                            handleRejectRequest(
+                                              employee._id,
+                                              req._id
+                                            )
+                                          }
+                                        >
+                                          Reject
+                                        </button>
+                                        <button
+                                          className="bg-yellow-600 text-white py-1 px-3 rounded-lg hover:bg-yellow-700 transition-all w-full sm:w-auto"
+                                          onClick={() =>
+                                            handleEditRequest(
+                                              employee._id,
+                                              req._id,
+                                              req.amount
+                                            )
+                                          }
+                                        >
+                                          Edit
+                                        </button>
+                                      </div>
                                     )}
-                                  </p>
-                                  {req.status === "pending" && (
-                                    <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mt-3">
-                                      <button
-                                        className="bg-green-600 text-white py-1 px-3 rounded-lg hover:bg-green-700 transition-all w-full sm:w-auto"
-                                        onClick={() =>
-                                          handleApproveRequest(
-                                            employee._id,
-                                            req._id
-                                          )
-                                        }
-                                      >
-                                        Approve
-                                      </button>
-                                      <button
-                                        className="bg-yellow-600 text-white py-1 px-3 rounded-lg hover:bg-yellow-700 transition-all w-full sm:w-auto"
-                                        onClick={() =>
-                                          handleEditRequest(
-                                            employee._id,
-                                            req._id,
-                                            req.amount
-                                          )
-                                        }
-                                      >
-                                        Edit
-                                      </button>
-                                    </div>
-                                  )}
-                                  {editingRequest?.requestId === req._id && (
-                                    <div className="mt-4 space-y-2">
-                                      <input
-                                        type="number"
-                                        value={editedAmount}
-                                        onChange={(e) =>
-                                          setEditedAmount(e.target.value)
-                                        }
-                                        className="border rounded-lg py-2 px-3 text-gray-700 w-full sm:w-32"
-                                        min="0"
-                                      />
-                                      <button
-                                        className="bg-blue-600 text-white py-1 px-3 rounded-lg hover:bg-blue-700 transition-all w-full sm:w-auto"
-                                        onClick={handleUpdateRequest}
-                                      >
-                                        Save Changes
-                                      </button>
-                                    </div>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="text-gray-500 text-center">
-                              No advance requests.
-                            </p>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                                    {editingRequest?.requestId === req._id && (
+                                      <div className="mt-4 space-y-2">
+                                        <input
+                                          type="number"
+                                          value={editedAmount}
+                                          onChange={(e) =>
+                                            setEditedAmount(e.target.value)
+                                          }
+                                          className="border rounded-lg py-2 px-3 text-gray-700 w-full sm:w-32"
+                                          min="0"
+                                        />
+                                        <button
+                                          className="bg-blue-600 text-white py-1 px-3 rounded-lg hover:bg-blue-700 transition-all w-full sm:w-auto"
+                                          onClick={handleUpdateRequest}
+                                        >
+                                          Save Changes
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-gray-500 text-center">
+                                No advance requests.
+                              </p>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             </div>
           ) : (
             <h1 className="text-center text-gray-600 mt-6">
-              No employees found.
+              No employees with advance requests.
             </h1>
           )}
         </div>

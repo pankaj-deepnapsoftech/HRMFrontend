@@ -23,15 +23,14 @@ import { GiSecurityGate } from "react-icons/gi";
 import { FiAlertTriangle } from "react-icons/fi";
 
 const EmpHome = () => {
-  const [presentDates, setPresentDates] = useState([]);
   const [showCalendar, setShowCalendar] = useState(false);
   const [employeeId, setEmployeeId] = useState("");
+  const [employee, setEmployee] = useState("");
 
   const navigate = useNavigate(); // to navigate after logout
 
   // // Use EmployeeContext to get the employee data
   const { employees } = useContext(EmployeeContext);
-
 
   // // Get employee data from localStorage
 
@@ -41,8 +40,8 @@ const EmpHome = () => {
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
+        setEmployee(parsedUser.data.userResponse);
         setEmployeeId(parsedUser.data.userResponse._id);
-
       } catch (error) {
         toast.error(`Error parsing user data from local storage: ${error}`);
       }
@@ -75,24 +74,63 @@ const EmpHome = () => {
     }
   };
 
-  // Function to highlight tiles
+
+
+  const presentDates = employee?.attendance
+    ?.filter((entry) => entry.status === "Present")
+    .map((entry) => new Date(entry.date));
+
+  const absentDates = employee?.attendance
+    ?.filter((entry) => entry.status !== "Present")
+    .map((entry) => new Date(entry.date));
+
+  // Function to check if a day is present
+  const isPresent = (date) => {
+    return presentDates.some(
+      (presentDate) =>
+        presentDate.getDate() === date.getDate() &&
+        presentDate.getMonth() === date.getMonth() &&
+        presentDate.getFullYear() === date.getFullYear()
+    );
+  };
+
+  // Function to check if a day is absent
+  const isAbsent = (date) => {
+    return absentDates.some(
+      (absentDate) =>
+        absentDate.getDate() === date.getDate() &&
+        absentDate.getMonth() === date.getMonth() &&
+        absentDate.getFullYear() === date.getFullYear()
+    );
+  };
+
   const tileClassName = ({ date, view }) => {
     if (view === "month") {
-      const formattedDate = date.toISOString().split("T")[0];
-
-      // Highlight present dates in green
-      if (presentDates.some((item) => item.date === formattedDate)) {
-        return "present-date";
-      }
-
-      // Highlight today's date in blue
-      const today = new Date().toISOString().split("T")[0];
-      if (formattedDate === today) {
-        return "today-date";
+      if (isPresent(date)) {
+        return "react-calendar__tile--present"; // Custom class for present days
+      } else if (isAbsent(date)) {
+        return "react-calendar__tile--absent"; // Custom class for absent days
       }
     }
-    return null;
   };
+
+  // const tileClassName = ({ date, view }) => {
+  //   if (view === "month") {
+  //     const formattedDate = date.toISOString().split("T")[0];
+
+  //     // Highlight present dates in green
+  //     if (presentDates.some((item) => item.date === formattedDate)) {
+  //       return "present-date";
+  //     }
+
+  //     // Highlight today's date in blue
+  //     const today = new Date().toISOString().split("T")[0];
+  //     if (formattedDate === today) {
+  //       return "today-date";
+  //     }
+  //   }
+  //   return null;
+  // };
 
   return (
     <>
@@ -101,12 +139,7 @@ const EmpHome = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-xl font-semibold mb-4">Attendance Calendar</h2>
-            <Calendar
-              tileClassName={tileClassName}
-              onClickDay={(value) =>
-                alert(`Selected date: ${value.toLocaleDateString()}`)
-              }
-            />
+            <Calendar tileClassName={tileClassName} />
             <button
               className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
               onClick={() => setShowCalendar(false)}
@@ -116,6 +149,32 @@ const EmpHome = () => {
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        /* Custom styling for highlighted days */
+        .react-calendar__tile--present {
+          color: #38a169 !important; /* Green text for present days */
+          background-color: #e6f4ea !important; /* Light green background for present days */
+          border-radius: 100%;
+        }
+
+        .react-calendar__tile--present:active {
+          background-color: #2f855a !important; /* Darker green for active present day */
+          color: white !important; /* White text when active */
+        }
+
+        .react-calendar__tile--absent {
+          color: #e53e3e !important; /* Red text for absent days */
+          background-color: #fde8e8 !important; /* Light red background for absent days */
+          border-radius: 100%;
+        }
+
+        .react-calendar__tile--absent:active {
+          background-color: #c53030 !important; /* Darker red for active absent day */
+          color: white !important; /* White text when active */
+        }
+      `}</style>
+
       {/* Table Section */}
       <div>
         <div className=" p-6 bg-gray-100 min-h-screen">

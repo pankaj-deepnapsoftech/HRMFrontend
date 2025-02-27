@@ -128,12 +128,12 @@ const Login = () => {
               </button>
             </form>
             <div className="text-center text-sm text-gray-500 mt-6">
-              <h1>
+              {/* <h1>
                 Don't have an account?{" "}
                 <Link to="/register" className="text-[#586EF1]">
                   Register
                 </Link>
-              </h1>
+              </h1> */}
               <Link
                 to="/forgot/password"
                 className="text-indigo-600 hover:underline"

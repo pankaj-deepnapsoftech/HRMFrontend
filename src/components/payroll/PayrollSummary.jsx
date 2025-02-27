@@ -21,12 +21,13 @@ const PayrollSummary = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewOpen, setViewOpen] = useState(false);
 
-
-
   const handleViewOpen = (employee) => {
     setSelectedEmployee(employee);
     setViewOpen(true);
   };
+
+  console.log(employees);
+
 
   const handleViewClose = () => {
     setViewOpen(false);
@@ -36,6 +37,7 @@ const PayrollSummary = () => {
   const earningTitle = [
     "Basic Salary",
     "Fund(12%)",
+    "Total Working Days",
     "Incentives",
     "Reimbursement",
     "Advance",
@@ -43,7 +45,13 @@ const PayrollSummary = () => {
   ];
 
   console.log(selectedEmployee);
-  
+  // Function to calculate the number of days in the current month
+  const getDaysInMonth = () => {
+    const date = new Date();
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate(); // Get the last date of the current month
+  };
+
+  const totalDaysInMonth = getDaysInMonth();
 
   return (
     <div>
@@ -162,6 +170,9 @@ const PayrollSummary = () => {
                     if (title === "Fund(12%)") {
                       amount = `₹ ${fund.toFixed(2)}`;
                     }
+                    if (title === "Total Working Days") {
+                      amount = selectedEmployee?.attendance?.length;
+                    }
 
                     if (title === "Incentives") {
                       amount = `₹ ${incentivesTotal.toFixed(2)}`;
@@ -175,15 +186,18 @@ const PayrollSummary = () => {
                       amount = `₹ ${advanceTotal.toFixed(2)}`;
                     }
 
-
-
                     if (title === "Total Earning") {
                       const totalEarnings =
                         basicSalary +
                         incentivesTotal +
                         reimbursementTotal -
                         (fund + advanceTotal);
-                      amount = `₹ ${totalEarnings.toFixed(2)}`;
+
+                      const actualSalary =
+                        (totalEarnings / totalDaysInMonth) *
+                        selectedEmployee?.attendance?.length;
+
+                      amount = `₹ ${actualSalary.toFixed(2)}`;
                     }
 
                     return (

@@ -33,7 +33,6 @@ const EmpPaymentSlip = () => {
 
       const totalSalary = userData.salary - fund;
 
-
       setEmployee({ ...userData, workingDays: presentDays, fund, totalSalary });
     }
   }, []);
@@ -111,22 +110,32 @@ const EmpPaymentSlip = () => {
       0
     );
 
+    const totalWorkingDays = employee?.attendance?.filter(
+      (entry) => entry.status === "Present"
+    ).length;
+
+    const fund = (employee?.salary * 12) / 100;
+
+    const getDaysInMonth = () => {
+      const date = new Date();
+      return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate(); // Get the last date of the current month
+    };
+
+    const totalDaysInMonth = getDaysInMonth();
+
+    const totalSalary =
+      employee?.salary + incentive + reimbursement - (fund + advanceTotal);
+    const actualSalary = (totalSalary / totalDaysInMonth) * totalWorkingDays;
+
     const salaryBreakdown = [
       ["Basic Salary", `${employee.salary.toFixed(2)}`],
-      ["Fund (12%)", `${employee.fund.toFixed(2)}`],
+      ["Fund (12%)", `${fund.toFixed(2)}`],
+      ["Total Working Days", `${totalWorkingDays}`],
       ["Incentives", `${incentive.toFixed(2)}`],
       ["Reimbursements", `${reimbursement.toFixed(2)}`],
       ["Advance", `${advanceTotal.toFixed(2)}`],
       ["Deductions", "0.00"],
-      [
-        "Net Salary",
-        `${(
-          (employee?.salary +
-          incentive +
-          reimbursement) -
-          (employee.fund + advanceTotal)
-        ).toFixed(2)}`,
-      ],
+      ["Net Salary", `${actualSalary.toFixed(2)}`],
     ];
     // Using AutoTable for consistent formatting
     doc.autoTable({

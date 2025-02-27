@@ -26,6 +26,7 @@ const EmpSalaryManagement = () => {
       return 0;
 
     // Deduct 12% fund from the monthly salary
+    
     const salaryAfterFund = monthlySalary * 0.88;
 
     // Get the actual number of days in the current month

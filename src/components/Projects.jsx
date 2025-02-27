@@ -11,10 +11,12 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
+import { FaRegEdit } from "react-icons/fa";
 
 const Projects = () => {
   // Project modal for opening modals
   const [projectModal, setProjectModal] = useState(false);
+
   // State for handling form fields
   const [projectName, setProjectName] = useState("");
   const [managerName, setManagerName] = useState("");
@@ -24,6 +26,7 @@ const Projects = () => {
   const [description, setDescription] = useState("");
   const [managers, setManagers] = useState([]);
   const [members, setMembers] = useState([]);
+  const [projectId, setProjectId] = useState(undefined);
   const [deleteProject, setDeleteProject] = useState("");
   // State for storing the response
   const [project, setProject] = useState("");
@@ -37,7 +40,7 @@ const Projects = () => {
   };
 
   // useContext
-  const { projectDetails } = useContext(ProjectContext);
+  const { projectDetails, setRefresh } = useContext(ProjectContext);
 
   const projectObj = {
     projectName,
@@ -67,7 +70,6 @@ const Projects = () => {
       );
       setManagers(filteredManagers); // Set filtered managers
       setMembers(activeUsers);
-
     } catch (error) {
       toast.error(`Error fetching registered users: ${error}`);
     }
@@ -78,38 +80,71 @@ const Projects = () => {
   }, []);
 
   // Function for handling the form submission
-  const submitHandler = async (e) => {
+  const submitHandler = async (e, projectId) => {
     e.preventDefault();
+    console.log(projectId);
 
-    try {
-      const response = await axios.post(
-        `${
-          import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
-        }/api/v1/user/projectDetails`,
-        projectObj,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setProject(response.data.data.project);
+    if(projectId === undefined){
+      try {
+        const response = await axios.post(
+          `${
+            import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+          }/api/v1/user/projectDetails`,
+          projectObj,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setProject(response.data.data.project);
+  
+        // Store user data in local storage
+        localStorage.setItem("projectDetails", JSON.stringify(response.data));
+  
+        // handle the response
+        toast.success("Project Added Successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+        setProjectModal(false);
+        setRefresh();
+      } catch (error) {
+        toast.error("Project does not created", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+      }
+    }else{
+      try {
+        await axios.put(
+          `${
+            import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+          }/api/v1/user/projectDetails/update/${projectId}`,
+          projectObj,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-      // Store user data in local storage
-      localStorage.setItem("projectDetails", JSON.stringify(response.data));
-
-      // handle the response
-      toast.success("Project Added Successfully!", {
-        position: "top-right",
-        autoClose: 1000,
-      });
-      setProjectModal(false);
-    } catch (error) {
-      toast.error("Project does not created", {
-        position: "top-right",
-        autoClose: 1000,
-      });
+        // handle the response
+        toast.success("Project updated Successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+        setProjectModal(false);
+        setProjectId(undefined);
+        setRefresh();
+      } catch (error) {
+        toast.error("Project does not updated", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+      }
     }
+  
   };
 
   // Filter projects based on selected dates
@@ -124,6 +159,34 @@ const Projects = () => {
       (!filterEnd || projectEndDate <= filterEnd)
     );
   });
+
+  const handleEdit = (item) => {
+    setProjectName(item.projectName);
+    setEndDate(item.endDate);
+    setStartDate(item.startDate);
+    setDescription(item.description);
+    setManagerName(item.managerName);
+    setSelectMember(item.selectMember);
+    setProjectId(item._id)
+    setProjectModal(!projectModal);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(
+        `${
+          import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+        }/api/v1/user/projectDetails/${id}`
+      );
+
+     
+      toast.success("Project removed successfully.");
+      setRefresh();
+    } catch (error) {
+      toast.error("Failed to remove the project!");
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -156,7 +219,7 @@ const Projects = () => {
         >
           <Modal.Body>
             <div className="max-w-4xl mx-auto bg-white p-16">
-              <form onSubmit={submitHandler}>
+              <form onSubmit={(e)=>submitHandler(e,projectId)}>
                 <div className="pb-5">
                   <label
                     htmlFor="first_name"
@@ -170,6 +233,7 @@ const Projects = () => {
                     className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Enter Project Name"
                     required
+                    value={projectName}
                     onChange={(e) => setProjectName(e.target.value)}
                   />
                 </div>
@@ -219,7 +283,7 @@ const Projects = () => {
                       className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-900"
                       required
                     />
-                    <p className="mt-2 text-sm text-gray-500">
+                     <p className="mt-2 text-sm text-gray-500">
                       Selected Members: {selectMember.length}{" "}
                       {selectMember.length === 1 ? "member" : "members"}
                     </p>
@@ -237,6 +301,7 @@ const Projects = () => {
                       id="visitors"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       required
+                      value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
                     />
                   </div>
@@ -253,6 +318,7 @@ const Projects = () => {
                       id="visitors"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       required
+                      value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
                     />
                   </div>
@@ -269,6 +335,7 @@ const Projects = () => {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Project Description"
                     required
+                    value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   />
                 </div>
@@ -314,6 +381,9 @@ const Projects = () => {
                 <th scope="col" class="px-6 py-3">
                   End Date
                 </th>
+                <th scope="col" class="px-6 py-3">
+                  Action
+                </th>
               </tr>
             </thead>
             {filteredProjects.length > 0 ? (
@@ -343,6 +413,16 @@ const Projects = () => {
                     <td class="px-6 py-4">{item.managerName}</td>
                     <td class="px-6 py-4">{item.startDate || "Not Found"}</td>
                     <td class="px-6 py-4">{item.endDate || "Not Found"}</td>
+                    <td class="px-6 py-4 flex justify-center gap-3 items-center">
+                      <FaRegEdit
+                        className="text-blue-500 cursor-pointer"
+                        onClick={() => handleEdit(item)}
+                      />
+                      <RiDeleteBin6Line
+                        className="text-red-500 cursor-pointer"
+                        onClick={() => handleDelete(item._id)}
+                      />
+                    </td>
                   </tr>
                 </tbody>
               ))

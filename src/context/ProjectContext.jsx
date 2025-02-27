@@ -6,6 +6,8 @@ export const ProjectContext = createContext();
 export const ProjectProvider = ({ children }) => {
   const [projectDetails, setProjectDetails] = useState([]);
   const [totalProject, setTotalProject] = useState("");
+   const [refresh,setRefresh] = useState("");
+  
 
   const fetchProject = async () => {
     try {
@@ -23,11 +25,12 @@ export const ProjectProvider = ({ children }) => {
 
   useEffect(() => {
     fetchProject();
-  }, []);
+  }, [refresh]);
+
 
   return (
     <ProjectContext.Provider
-      value={{ projectDetails, totalProject, fetchProject }}
+      value={{ projectDetails, totalProject, fetchProject, setRefresh }}
     >
       {children}
     </ProjectContext.Provider>
